@@ -10,14 +10,13 @@
   --wa:#25d366;
 }
 
-/* RESET */
 *{box-sizing:border-box}
 html,body{
   margin:0; padding:0; background:#000;
   color:var(--text); font-family:Arial, Helvetica, sans-serif;
 }
 
-/* ------------ HEADER / HERO ------------ */
+/* ------------ HEADER ------------ */
 .hero{
   background: var(--brand);
   text-align:center;
@@ -36,34 +35,32 @@ html,body{
   mix-blend-mode:multiply;
   pointer-events:none;
 }
-.logo{ 
-  width:88px; display:block; margin:0 auto 8px; 
-  border-radius:50%; background:#fff2; padding:6px 
+.logo{
+  width:88px; display:block; margin:0 auto 8px;
+  border-radius:50%; background:#fff2; padding:6px
 }
 .hero h1{ margin:0; font-size:2rem }
 .hero p{ margin:.35rem 0 0; color:#fff; opacity:.9 }
 
-/* ------------ MAIN AREA ------------ */
+/* ------------ BODY ------------ */
 main{
   position:relative;
   min-height: calc(100vh - 220px);
-  padding:24px 16px 64px;
 
-  /* ✅ Fondo cinematográfico montaña */
+  /* ✅ Fondo con IMAGEN COMPLETA, SIN deformar (desktop) */
+  background:#000;
   background-image: url('bg.jpg');
-  background-size: cover;
-  background-position: center center;
+  background-size: contain !important;
+  background-position: top center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  filter: brightness(.65);
-}
 
-/* ✅ Capa oscura + blur */
+  padding:24px 16px 64px;
+}
 main::before{
   content:"";
   position:absolute; inset:0;
-  background: rgba(0,0,0,.45);
-  backdrop-filter: blur(3px);
+  background:linear-gradient(180deg, rgba(0,0,0,.60), rgba(0,0,0,.95));
   pointer-events:none;
 }
 
@@ -153,16 +150,42 @@ button:disabled{ opacity:.5; cursor:not-allowed }
   opacity:.85;
 }
 
-/* GLOBAL */
+/* ------------ GENERAL ------------ */
 .hidden{ display:none }
 
-/* ✅ Mobile fix para fondo (iPhone incluido) */
-@media (max-width: 768px) {
-  main {
-    background-size: cover;
-    background-position: center;
-    background-attachment: scroll;
-    filter: brightness(.70);
-  }
+/* === MATRIZ DISC CON IMAGEN + MARCADOR === */
+.disc-matrix{
+  position: relative;
+  max-width: 780px;
+  margin: 8px auto 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #ffffff22;
+  background: #0b0b0b;
+}
+.disc-matrix img{
+  display:block;
+  width:100%;
+  height:auto;              /* ✅ NO se deforma */
+  object-fit: contain;      /* ✅ Mantiene proporción */
+  filter: brightness(.92) contrast(1.02);
+}
+.disc-marker{
+  position: absolute;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #ffd08a;
+  border: 3px solid rgba(0,0,0,.55);
+  box-shadow: 0 0 0 3px rgba(255,208,138,.28), 0 0 8px rgba(0,0,0,.35);
+  transform: translate(-50%, -50%);
 }
 
+/* ✅ Ajuste especial para celulares */
+@media (max-width: 768px) {
+  main {
+    background-size: cover !important;   /* Llenar pantalla sin bandas */
+    background-position: center center;
+    background-attachment: scroll;       /* Evita saltos al scroll en iOS */
+  }
+  .disc-marker{ width:16px; height:16px; }
+}
