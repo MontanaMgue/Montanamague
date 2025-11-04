@@ -2,49 +2,49 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Test de Personalidad DISC</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Test de Personalidad DISC — Montaña Malargüe</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HERO -->
   <header class="hero">
-    <img src="logo.png" class="logo" alt="Logo Montaña Malargüe" />
+    <img src="logo.png" alt="Logo Montaña Malargüe" class="logo" />
     <h1>Test de Personalidad DISC</h1>
-    <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña.</p>
+    <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña</p>
   </header>
 
   <main>
-    <!-- Info de escala -->
     <section class="card info">
-      <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
+      <p><strong>Cómo responder:</strong> Elegí la opción que mejor te represente <em>en general</em>.
+        No hay respuestas “buenas o malas”. Tarda 7–10 minutos.</p>
     </section>
 
-    <!-- Barra de progreso -->
+    <!-- Progreso -->
     <div class="progress-wrap">
       <div class="progress"><div id="progressBar"></div></div>
-      <div id="progressText">0 / 50</div>
+      <div id="progressText">0 / 56</div>
     </div>
 
-    <!-- Preguntas -->
+    <!-- Formulario -->
     <form id="discForm" class="card">
       <div id="questions"></div>
     </form>
 
-    <!-- Botones -->
     <div class="actions">
-      <button id="btnResult" type="button">Ver Resultado</button>
-      <button id="btnReset" type="button" class="secondary">Reiniciar test</button>
+      <button id="btnResult">Ver resultado</button>
+      <button id="btnReset" class="secondary">Reiniciar</button>
     </div>
 
-    <!-- RESULTADOS -->
+    <!-- Resultado -->
     <section id="resultCard" class="card hidden">
-      <h2>Resultado</h2>
-      <p class="result-title">
-        Perfil principal:
-        <strong id="resultType">—</strong>
-        (<span id="resultPct">—</span>)
-      </p>
+      <h2 class="result-title">Resultado: <span id="resultType">—</span> <span id="resultPct"></span></h2>
+
+      <!-- Imagen personalizada con marcador -->
+      <div class="matrix-wrap">
+        <!-- 👉 Cambiá 'resultado.jpg' por la imagen que quieras usar como fondo del resultado -->
+        <img id="discMatrixImg" src="resultado.jpg" alt="Matriz/Imagen de resultado" />
+        <div id="discMarker" class="marker" title="Tu posición"></div>
+      </div>
 
       <div class="summary-grid">
         <div>
@@ -61,32 +61,19 @@
         </div>
       </div>
 
-      <h3>Brújula DISC</h3>
-      <div class="disc-matrix">
-        <img id="discMatrixImg" src="disc-matrix.png" alt="Matriz DISC" />
-        <div id="discMarker" class="disc-marker" title="Tu posición"></div>
-      </div>
+      <p class="closing">
+        Recordá: la montaña es proceso. Tu perfil <strong id="closingType">—</strong> suma cuando se integra a un equipo diverso.
+        <br>“No es la cumbre… es el proceso.” 🏔️🔥💪
+      </p>
 
       <div class="chart-actions">
-        <button id="btnDownload" class="secondary" type="button">Descargar imagen</button>
-        <button id="btnWhatsApp" class="whatsapp" type="button">Compartir por WhatsApp</button>
+        <button id="btnDownload">Descargar PNG</button>
+        <button id="btnWhatsApp" class="whatsapp">Compartir por WhatsApp</button>
       </div>
-
-      <p class="closing">
-        Tu energía hoy se parece a <span id="closingType">—</span>.
-        Recordá: en altura manda el equipo. Usá tus fortalezas y compensá tus puntos ciegos.
-        Paso firme, comunicación clara y foco en la seguridad —las expediciones empiezan en casa.
-      </p>
     </section>
 
-    <p class="footer">
-      Orientativo para formación. No es diagnóstico psicológico.
-    </p>
+    <p class="footer">Montaña Malargüe · DISC orientado a grupos de montaña (uso educativo)</p>
   </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
 
   <script src="script.js"></script>
 </body>
