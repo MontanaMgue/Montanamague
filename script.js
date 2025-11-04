@@ -1,165 +1,248 @@
-// 1) Transforma cada <label + select> en un fieldset con 3 radios
-(function toThreeOptions(){
-  const form = document.getElementById('discTestForm');
-  if(!form) return;
+/* ==========
+   DISC 50 preguntas (3 opciones)
+   Escala: 1=En desacuerdo, 2=Neutral, 3=De acuerdo
+   Incluye: Brújula/Radar DISC con Chart.js
+   ==========
+*/
 
-  // Recolectamos pares label+select en orden
-  const nodes = Array.from(form.children);
-  for (let i = 0; i < nodes.length; i++) {
-    const label = nodes[i];
-    const select = nodes[i+1];
-    if (!label || !select || label.tagName !== 'LABEL' || select.tagName !== 'SELECT') continue;
+const QUESTIONS = [
+  // C — Analítico/Concienzudo (12)
+  {t:"Me doy cuenta de errores pequeños en mapas, datos o equipo.",g:"C"},
+  {t:"Antes de salir reviso listas y verifico que todo esté correcto.",g:"C"},
+  {t:"Me gusta seguir procedimientos y estándares claros.",g:"C"},
+  {t:"Prefiero tomar decisiones con datos y no por intuición.",g:"C"},
+  {t:"Disfruto planificar rutas con precisión y alternativas.",g:"C"},
+  {t:"Me concentro en mejorar sistemas y procesos del grupo.",g:"C"},
+  {t:"Puedo ser crítico cuando noto fallas que afectan la seguridad.",g:"C"},
+  {t:"Me siento bien cuando todo está ordenado y controlado.",g:"C"},
+  {t:"Ante una duda técnica, investigo a fondo antes de actuar.",g:"C"},
+  {t:"Me mantengo objetivo al evaluar riesgos en la montaña.",g:"C"},
+  {t:"Valoro las lecciones aprendidas y los registros de cada salida.",g:"C"},
+  {t:"Chequeo doble las condiciones del clima y del equipo.",g:"C"},
 
-    const name = select.getAttribute('name');
-    const legendText = label.textContent.trim();
+  // I — Influyente/Inspirador (13)
+  {t:"Me entusiasma animar al equipo y mantener el ánimo alto.",g:"I"},
+  {t:"Conecto fácilmente con personas nuevas en el grupo.",g:"I"},
+  {t:"Me gusta proponer ideas creativas para actividades.",g:"I"},
+  {t:"Disfruto contar historias y hacer amena la caminata.",g:"I"},
+  {t:"Me nace reconocer los logros de los demás.",g:"I"},
+  {t:"Valoro la cohesión social del grupo tanto como la meta.",g:"I"},
+  {t:"Siento que puedo motivar cuando el grupo decae.",g:"I"},
+  {t:"Suelo ofrecer ayuda incluso antes de que me la pidan.",g:"I"},
+  {t:"Soy optimista y busco el lado positivo en dificultades.",g:"I"},
+  {t:"Me energizan los proyectos nuevos y desafiantes.",g:"I"},
+  {t:"Me adapto a distintos roles si eso ayuda al equipo.",g:"I"},
+  {t:"Me gusta aprender de otros y compartir lo que sé.",g:"I"},
+  {t:"Valoro que el ambiente sea alegre y bien comunicado.",g:"I"},
 
-    // Fieldset
-    const fs = document.createElement('fieldset');
-    fs.className = 'question-block';
-    fs.innerHTML = `<legend>${legendText}</legend>`;
+  // D — Dominante/Decisor (13)
+  {t:"Asumo el mando cuando la situación lo requiere.",g:"D"},
+  {t:"Tomo decisiones con rapidez en terreno.",g:"D"},
+  {t:"No me incomoda la confrontación respetuosa si hace falta.",g:"D"},
+  {t:"Me gustan los retos físicos y claros objetivos de cumbre.",g:"D"},
+  {t:"Soy asertivo al expresar mis opiniones.",g:"D"},
+  {t:"Busco resultados y medir avances del equipo.",g:"D"},
+  {t:"Puedo seguir adelante aun con incertidumbre.",g:"D"},
+  {t:"Defiendo al grupo y a quienes dependen de mí.",g:"D"},
+  {t:"Me siento cómodo tomando responsabilidad por decisiones.",g:"D"},
+  {t:"Pongo manos a la obra y movilizo recursos rápido.",g:"D"},
+  {t:"Cuando llego a una meta, busco la siguiente.",g:"D"},
+  {t:"Puedo negociar y conseguir lo que el grupo necesita.",g:"D"},
+  {t:"Me enfoco en resolver y no quedarme en el problema.",g:"D"},
 
-    // Lista de opciones
-    const ul = document.createElement('ul');
-    ul.className = 'options';
-    const opts = [
-      { value: '1', label: 'En desacuerdo' },
-      { value: '2', label: 'Neutral' },
-      { value: '3', label: 'De acuerdo' },
-    ];
-    opts.forEach((o, idx) => {
-      const li = document.createElement('li');
-      const id = `${name}_${o.value}`;
-      li.innerHTML = `
-        <label for="${id}">
-          <input type="radio" id="${id}" name="${name}" value="${o.value}" ${idx===1?'checked':''} required />
-          ${o.label}
-        </label>`;
-      ul.appendChild(li);
-    });
+  // S — Estable/Sereno (12)
+  {t:"Brindo apoyo emocional y práctico de manera constante.",g:"S"},
+  {t:"Evito conflictos y prefiero el acuerdo común.",g:"S"},
+  {t:"Me gusta que el plan sea previsible y sin sorpresas.",g:"S"},
+  {t:"Escucho a todos antes de dar mi opinión.",g:"S"},
+  {t:"Soy leal al grupo y a quien confío como líder.",g:"S"},
+  {t:"Me tomo mi tiempo para decidir, evitando errores.",g:"S"},
+  {t:"Avisar cambios con anticipación me da tranquilidad.",g:"S"},
+  {t:"Ayudo a que todos se sientan incluidos en la conversación.",g:"S"},
+  {t:"Estoy dispuesto a ceder por la armonía del grupo.",g:"S"},
+  {t:"Pongo paz cuando hay tensiones.",g:"S"},
+  {t:"Prefiero el ritmo parejo antes que los apuros.",g:"S"},
+  {t:"Me enfoco en que cada salida sea segura y humana.",g:"S"},
+];
 
-    fs.appendChild(ul);
+// Índices por grupo
+const MAP = {C:[], I:[], D:[], S:[]};
+QUESTIONS.forEach((q, i)=> MAP[q.g].push(i));
 
-    // Reemplazo en el DOM
-    form.insertBefore(fs, label);
-    form.removeChild(label);
-    form.removeChild(select);
-  }
-
-  // Botón enviar (si no existe)
-  if (!form.querySelector('button[type="submit"]')) {
-    const submit = document.createElement('button');
-    submit.type = 'submit';
-    submit.textContent = 'Ver Resultado';
-    form.appendChild(submit);
-  }
-})();
-
-// 2) Mapeo de preguntas a escalas DISC
-// Heurística basada en los bloques temáticos del cuestionario original
-const R = (a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
-const MAP = {
-  C: [ ...R(0,10), ...R(37,45) ],                     // Detalle, análisis, objetividad
-  S: [ ...R(46,53), ...R(74,89) ],                    // Seguridad/estabilidad + armonía/paz
-  I: [ ...R(11,20), ...R(29,36), ...R(54,64), ...R(90,98) ], // Afecto, creatividad, sociabilidad, ayuda
-  D: [ ...R(21,28), ...R(65,73) ]                     // Logro/ambición + decisión/liderazgo
+// Textos por tipo
+const TEXT = {
+  D:{t:"Dominante (D)",
+     a:"Lidera decisiones rápidas, motivador ante retos físicos.",
+     d:"Impaciente, puede ignorar dudas de otros.",
+     r:"Hablar claro y directo; reconocer sus logros; pedir feedback breve."},
+  I:{t:"Influyente (I)",
+     a:"Animador del equipo, genera cohesión social.",
+     d:"Puede omitir detalles técnicos u orden.",
+     r:"Valorar sus ideas creativas; darle espacio social y de comunicación."},
+  S:{t:"Estable (S)",
+     a:"Aporta constancia, apoyo emocional y solidaridad.",
+     d:"Evita confrontaciones y cambios bruscos.",
+     r:"Explicar cambios con anticipación; agradecer su apoyo y continuidad."},
+  C:{t:"Concienzudo (C)",
+     a:"Planifica rutas, cuida seguridad y equipamiento; analítico.",
+     d:"Excesivamente cauteloso; puede ralentizar.",
+     r:"Proveer información detallada y pedir ayuda en la organización."}
 };
 
-// 3) Textos del resultado (tu versión montaña)
-const TEXTS = {
-  D: {
-    titulo: 'Dominante (D)',
-    aporte: 'Lidera decisiones rápidas, motivador ante retos físicos.',
-    debil: 'Impaciente, puede ignorar dudas de otros.',
-    recs: 'Hablar claro y directo, reconocer sus logros; pedir feedback en forma breve.'
-  },
-  I: {
-    titulo: 'Influyente (I)',
-    aporte: 'Animador del equipo, mantiene la cohesión social.',
-    debil: 'Desorganizado, puede omitir detalles técnicos.',
-    recs: 'Involucrarlo en la motivación del grupo; valorar sus ideas creativas.'
-  },
-  S: {
-    titulo: 'Estable (S)',
-    aporte: 'Fomenta la constancia, apoyo emocional y solidaridad.',
-    debil: 'Reacio al cambio, evita confrontaciones.',
-    recs: 'Asegurar su tranquilidad, explicar cambios con anticipación; agradecer su apoyo.'
-  },
-  C: {
-    titulo: 'Concienzudo (C)',
-    aporte: 'Planifica rutas, cuida la seguridad y equipamiento; analítico.',
-    debil: 'Excesivamente cauteloso, puede ralentizar al grupo.',
-    recs: 'Proveerle información detallada, respetar su ritmo; pedir ayuda en organización.'
+// Render dinámico del formulario
+const form = document.getElementById("discTestForm");
+QUESTIONS.forEach((q, i)=>{
+  const wrap = document.createElement("div");
+  wrap.className = "q";
+  wrap.innerHTML = `
+    <p class="title">${i+1}. ${q.t}</p>
+    <ul class="options">
+      <li>
+        <label class="option">
+          <input type="radio" name="q${i}" value="1">
+          En desacuerdo
+        </label>
+      </li>
+      <li>
+        <label class="option">
+          <input type="radio" name="q${i}" value="2" checked>
+          Neutral
+        </label>
+      </li>
+      <li>
+        <label class="option">
+          <input type="radio" name="q${i}" value="3">
+          De acuerdo
+        </label>
+      </li>
+    </ul>
+  `;
+  form.appendChild(wrap);
+});
+
+// Cálculo DISC
+function calcularPerfil(){
+  const vals = {};
+  for(let i=0;i<QUESTIONS.length;i++){
+    const sel = document.querySelector(`input[name="q${i}"]:checked`);
+    vals[i] = sel ? Number(sel.value) : 2;
   }
-};
+  const sum = {D:0,I:0,S:0,C:0};
+  for(const g of Object.keys(MAP)){
+    MAP[g].forEach(idx=> sum[g] += vals[idx]);
+  }
+  const max = {D:MAP.D.length*3, I:MAP.I.length*3, S:MAP.S.length*3, C:MAP.C.length*3};
+  const pct = {
+    D: Math.round(sum.D/max.D*100),
+    I: Math.round(sum.I/max.I*100),
+    S: Math.round(sum.S/max.S*100),
+    C: Math.round(sum.C/max.C*100),
+  };
+  const orden = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+  return {pct, top:orden[0][0]};
+}
 
-// 4) Scoring
-function calcScores() {
-  const scores = {D:0, I:0, S:0, C:0};
-  const totalBy = {D:MAP.D.length, I:MAP.I.length, S:MAP.S.length, C:MAP.C.length};
+// DOM referencias
+const resultBox = document.getElementById("result");
+const submitBtn = document.getElementById("submitBtn");
+const restartBtn = document.getElementById("restartBtn");
+const legend = document.getElementById("chartLegend");
 
-  // Recorremos todas las respuestas
-  const form = document.getElementById('discTestForm');
-  const inputs = form.querySelectorAll('input[type="radio"]:checked');
-  const values = {}; // name -> value
-  inputs.forEach(i => { values[i.name] = Number(i.value); });
-
-  // Función que suma un set de ítems a una escala
-  function sumSet(scale, arr){
-    arr.forEach(idx=>{
-      const name = 'q'+idx;
-      const v = values[name];
-      if (v==null) return;
-      // v: 1 (En desacuerdo), 2 (Neutral), 3 (De acuerdo)
-      scores[scale] += v;
+// Chart.js – Brújula
+let discChart = null;
+function renderChart(pct){
+  const ctx = document.getElementById("discChart");
+  const data = [pct.D, pct.I, pct.S, pct.C];
+  if(discChart){
+    discChart.data.datasets[0].data = data;
+    discChart.update();
+  }else{
+    discChart = new Chart(ctx, {
+      type: "radar",
+      data: {
+        labels: ["D", "I", "S", "C"],
+        datasets: [{
+          label: "Perfil DISC (%)",
+          data,
+          borderWidth: 2,
+          borderColor: "rgba(233,107,0,0.9)",
+          backgroundColor: "rgba(233,107,0,.18)",
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: [
+            getComputedStyle(document.documentElement).getPropertyValue('--d').trim(),
+            getComputedStyle(document.documentElement).getPropertyValue('--i').trim(),
+            getComputedStyle(document.documentElement).getPropertyValue('--s').trim(),
+            getComputedStyle(document.documentElement).getPropertyValue('--c').trim()
+          ],
+          pointBorderColor: "#fff"
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            beginAtZero: true,
+            suggestedMax: 100,
+            angleLines: { color: "rgba(255,255,255,.18)" },
+            grid: { color: "rgba(255,255,255,.12)" },
+            pointLabels: {
+              color: "#fff",
+              font: { weight:"700", size:13 }
+            },
+            ticks: {
+              backdropColor: "transparent",
+              color: "rgba(255,255,255,.8)",
+              stepSize: 20
+            }
+          }
+        },
+        plugins: {
+          legend: { display:false },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.label}: ${ctx.formattedValue}%`
+            }
+          }
+        }
+      }
     });
   }
 
-  sumSet('C', MAP.C);
-  sumSet('S', MAP.S);
-  sumSet('I', MAP.I);
-  sumSet('D', MAP.D);
-
-  // Normalizamos 0..100 para mostrar bonito
-  const norm = {};
-  Object.keys(scores).forEach(k=>{
-    const max = totalBy[k]*3;
-    norm[k] = Math.round((scores[k] / max) * 100);
-  });
-
-  // Mayoría
-  const top = Object.entries(norm).sort((a,b)=>b[1]-a[1])[0][0];
-  return {top, norm};
+  // Leyenda con colores y %
+  legend.innerHTML = `
+    <li><span class="dot d"></span><strong>D</strong> — ${pct.D}%</li>
+    <li><span class="dot i"></span><strong>I</strong> — ${pct.I}%</li>
+    <li><span class="dot s"></span><strong>S</strong> — ${pct.S}%</li>
+    <li><span class="dot c"></span><strong>C</strong> — ${pct.C}%</li>
+  `;
 }
 
-// 5) Render resultado
-function renderResult({top, norm}){
-  const res = document.getElementById('result');
-  const t = TEXTS[top];
+// Mostrar resultado
+submitBtn.addEventListener("click", ()=>{
+  const {pct, top} = calcularPerfil();
+  const T = TEXT[top];
+  document.getElementById("resultType").textContent = `${T.t} — ${pct[top]}%`;
+  document.getElementById("groupContribution").textContent = T.a;
+  document.getElementById("strengths").textContent = T.d;
+  document.getElementById("toImprove").textContent = T.r;
 
-  document.getElementById('resultType').textContent = `${t.titulo} — ${norm[top]}%`;
-  document.getElementById('groupContribution').textContent = t.aporte;
-  document.getElementById('strengths').textContent = t.debil;
-  document.getElementById('toImprove').textContent = t.recs;
-
-  res.classList.remove('hidden');
-  res.scrollIntoView({behavior:'smooth'});
-}
-
-// 6) Envío y reinicio
-document.getElementById('discTestForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  renderResult(calcScores());
+  renderChart(pct);
+  resultBox.classList.remove("hidden");
+  resultBox.scrollIntoView({behavior:"smooth"});
 });
 
-document.getElementById('result').addEventListener('click', function(e){
-  if (e.target.id === 'restartBtn'){
-    // Reset form (marca Neutral)
-    const form = document.getElementById('discTestForm');
-    form.querySelectorAll('input[type="radio"][value="2"]').forEach(r=>{
-      r.checked = true;
-    });
-    document.getElementById('result').classList.add('hidden');
-    window.scrollTo({top:0, behavior:'smooth'});
+// Reiniciar
+restartBtn.addEventListener("click", ()=>{
+  document.querySelectorAll('input[type="radio"][value="2"]').forEach(r=> r.checked = true);
+  resultBox.classList.add("hidden");
+  if(discChart){
+    discChart.data.datasets[0].data = [0,0,0,0];
+    discChart.update();
+    legend.innerHTML = "";
   }
+  window.scrollTo({top:0, behavior:"smooth"});
 });
+
 
