@@ -3,49 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test DISC — Montaña Malargüe</title>
+  <title>Test de Personalidad DISC</title>
   <link rel="stylesheet" href="style.css"/>
-  <!-- Chart.js para la brújula DISC -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- MUY IMPORTANTE: defer para que el script corra cuando el DOM ya existe -->
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="topbar">
-    <img src="assets/logo.png" class="logo" alt="Logo Montaña Malargüe"/>
+  <header class="hero">
+    <img src="assets/logo.png" alt="Logo Montaña Malargüe" class="logo"/>
     <h1>Test de Personalidad DISC</h1>
     <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña</p>
   </header>
 
   <main>
-    <section class="notice">
+    <section class="card info">
       <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
     </section>
 
-    <form id="discTestForm" class="form"></form>
+    <!-- FORM y contenedor para inyectar las 50 preguntas -->
+    <form id="discTestForm" class="card">
+      <div id="questions"></div>
 
-    <div class="actions">
-      <button type="button" id="submitBtn" class="send">Ver Resultado</button>
-      <button type="button" id="restartBtn" class="ghost">Reiniciar test</button>
-    </div>
+      <div class="actions">
+        <button type="button" id="seeResult">Ver Resultado</button>
+        <button type="button" class="ghost" id="resetForm">Reiniciar test</button>
+      </div>
+    </form>
 
-    <section id="result" class="hidden">
-      <h2>Resultado: <span id="resultType"></span></h2>
+    <!-- RESULTADOS -->
+    <section id="result" class="card hidden">
+      <h2 id="resultTitle">Resultado</h2>
 
-      <!-- Brújula DISC -->
-      <div class="chart-wrap">
-        <canvas id="discChart" width="460" height="360" aria-label="Brújula DISC" role="img"></canvas>
-        <ul class="chart-legend" id="chartLegend">
-          <!-- Se rellena por JS con % -->
-        </ul>
+      <div class="result-grid">
+        <div>
+          <p><strong>Dominante (D):</strong> <span id="pd">0</span>%</p>
+          <p><strong>Influyente (I):</strong> <span id="pi">0</span>%</p>
+          <p><strong>Estable (S):</strong> <span id="ps">0</span>%</p>
+          <p><strong>Concienzudo (C):</strong> <span id="pc">0</span>%</p>
+        </div>
+
+        <div class="compass-wrap">
+          <canvas id="discCompass" width="360" height="360" aria-label="Brújula DISC"></canvas>
+        </div>
       </div>
 
-      <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
-      <p><strong>Debilidades:</strong> <span id="strengths"></span></p>
-      <p><strong>Recomendaciones:</strong> <span id="toImprove"></span></p>
-    </section>
-  </main>
+      <hr/>
 
-  <footer>
-    Orientativo para formación. No es diagnóstico psicológico.
+      <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
+      <p><strong>Puntos fuertes:</strong> <span id="strengths"></span></p>
+      <p><strong>A mejorar:</strong> <span id="toImprove"></span></p>
+      <p><strong>Recomendaciones:</strong> <span id="recs"></span></p>
+    </section>
+
+    <p class="disclaimer">Orientativo para formación. No es diagnóstico psicológico.</p>
+  </main>
+</body>
+</html>
+
   </footer>
 
   <script src="script.js"></scri
