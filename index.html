@@ -1,75 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Test de Personalidad DISC</title>
-  <link rel="stylesheet" href="style.css"/>
-  <!-- Chart.js CDN para la brújula -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- HERO -->
   <header class="hero">
-    <img src="logo.png" alt="Logo Montaña Malargüe" class="logo" />
+    <img src="logo.png" class="logo" alt="Logo Montaña Malargüe" />
     <h1>Test de Personalidad DISC</h1>
     <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña.</p>
   </header>
 
   <main>
-    <section class="info card">
+    <!-- Info de escala -->
+    <section class="card info">
       <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
     </section>
 
-    <section class="progress-wrap">
-      <div class="progress">
-        <div id="progressBar"></div>
-      </div>
-      <span id="progressText">0 / 50</span>
-    </section>
-
-    <form id="discForm" class="card"></form>
-
-    <div class="actions">
-      <button id="submitBtn" type="button" disabled>Ver Resultado</button>
-      <button id="resetBtn" type="button" class="secondary">Reiniciar test</button>
+    <!-- Barra de progreso -->
+    <div class="progress-wrap">
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="progressText">0 / 50</div>
     </div>
 
-    <section id="result" class="card hidden">
+    <!-- Preguntas -->
+    <form id="discForm" class="card">
+      <div id="questions"></div>
+    </form>
+
+    <!-- Botones -->
+    <div class="actions">
+      <button id="btnResult" type="button">Ver Resultado</button>
+      <button id="btnReset" type="button" class="secondary">Reiniciar test</button>
+    </div>
+
+    <!-- RESULTADOS -->
+    <section id="resultCard" class="card hidden">
       <h2>Resultado</h2>
       <p class="result-title">
-        Perfil principal: <strong id="resultType">—</strong> (<span id="resultPercent">—</span>)
+        Perfil principal:
+        <strong id="resultType">—</strong>
+        (<span id="resultPct">—</span>)
       </p>
 
       <div class="summary-grid">
         <div>
           <h3>Aportes al grupo</h3>
-          <p id="groupContribution"></p>
+          <p id="groupContribution">—</p>
         </div>
         <div>
           <h3>Puntos fuertes</h3>
-          <p id="strengths"></p>
+          <p id="strengths">—</p>
         </div>
         <div>
           <h3>A mejorar</h3>
-          <p id="toImprove"></p>
+          <p id="toImprove">—</p>
         </div>
       </div>
 
-      <h3 style="margin-top:1.25rem;">Brújula DISC</h3>
-      <canvas id="discChart" width="480" height="480" aria-label="Brújula DISC"></canvas>
-
-      <div class="chart-actions">
-        <button id="downloadImg" type="button" class="secondary">Descargar imagen</button>
-        <button id="shareWA" type="button" class="whatsapp">Compartir por WhatsApp</button>
+      <h3>Brújula DISC</h3>
+      <div class="disc-matrix">
+        <img id="discMatrixImg" src="disc-matrix.png" alt="Matriz DISC" />
+        <div id="discMarker" class="disc-marker" title="Tu posición"></div>
       </div>
 
-      <p id="closingNote" class="closing"></p>
+      <div class="chart-actions">
+        <button id="btnDownload" class="secondary" type="button">Descargar imagen</button>
+        <button id="btnWhatsApp" class="whatsapp" type="button">Compartir por WhatsApp</button>
+      </div>
+
+      <p class="closing">
+        Tu energía hoy se parece a <span id="closingType">—</span>.
+        Recordá: en altura manda el equipo. Usá tus fortalezas y compensá tus puntos ciegos.
+        Paso firme, comunicación clara y foco en la seguridad —las expediciones empiezan en casa.
+      </p>
     </section>
 
-    <footer class="footer">
+    <p class="footer">
       Orientativo para formación. No es diagnóstico psicológico.
-    </footer>
+    </p>
   </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
   <script src="script.js"></script>
 </body>
