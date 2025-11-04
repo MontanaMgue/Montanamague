@@ -1,85 +1,88 @@
 /* =========================================================
-   DISC — 50 ÍTEMS BALANCEADOS + REVERSE-SCORED
-   Escala: 0 (En desacuerdo), 1 (Neutral), 2 (De acuerdo)
-   Si reverse=true -> puntuación = 2 - valor
+   DISC — 56 ÍTEMS FIJOS (14 por factor)
+   Escala: 0 (En desacuerdo) / 1 (Neutral) / 2 (De acuerdo)
+   Ítems invertidos: r:true -> puntaje = 2 - valor
    ========================================================= */
 
-const QUESTIONS = (() => {
-  // 12 por factor (48) + 2 extra equilibrando D/I
-  const D = [
-    { t:'D', q:'Prefiero decidir rápido aunque no tenga toda la información.', r:false },
-    { t:'D', q:'Ante un imprevisto en montaña, asumo el mando con naturalidad.', r:false },
-    { t:'D', q:'Me siento cómodo/a confrontando decisiones que considero equivocadas.', r:false },
-    { t:'D', q:'Si el grupo duda, avanzo y elijo una ruta con criterio propio.', r:false },
-    { t:'D', q:'A veces me impaciento cuando se discute demasiado.', r:false },
-    { t:'D', q:'Evito tomar decisiones críticas (por miedo a errar).', r:true  },
-    { t:'D', q:'Me cuesta decir “no” incluso si la propuesta es riesgosa.', r:true  },
-    { t:'D', q:'Postergaría una decisión importante para evitar conflictos.', r:true  },
-    { t:'D', q:'Prefiero que otros tomen las decisiones difíciles.', r:true  },
-    { t:'D', q:'Ante presión, mantengo el foco y resuelvo con determinación.', r:false },
-    { t:'D', q:'Cuando la situación es tensa, me vuelvo pasivo/a.', r:true  },
-    { t:'D', q:'Me resulta natural liderar la salida cuando hay incertidumbre.', r:false },
-  ];
-  const I = [
-    { t:'I', q:'Me gusta motivar al grupo con metas y mensajes positivos.', r:false },
-    { t:'I', q:'Busco integrar a personas nuevas para que se sientan parte.', r:false },
-    { t:'I', q:'Si hay tensiones, tiendo a mediar desde la cercanía.', r:false },
-    { t:'I', q:'Me entusiasmo y contagio energía en las subidas exigentes.', r:false },
-    { t:'I', q:'Evito hablar en público o animar al grupo.', r:true  },
-    { t:'I', q:'Me cuesta proponer ideas creativas en el campamento.', r:true  },
-    { t:'I', q:'Suelo generar buen clima social durante la actividad.', r:false },
-    { t:'I', q:'Prefiero aislarme del grupo aun cuando hace falta unión.', r:true  },
-    { t:'I', q:'Disfruto reconocer y celebrar los logros del equipo.', r:false },
-    { t:'I', q:'Me es indiferente si el grupo está desmotivado.', r:true  },
-    { t:'I', q:'Tiendo a comunicar de forma clara y positiva.', r:false },
-    { t:'I', q:'Evito dar mi opinión para no llamar la atención.', r:true  },
-  ];
-  const S = [
-    { t:'S', q:'Me sale dar apoyo emocional cuando alguien la pasa mal.', r:false },
-    { t:'S', q:'Prefiero ritmos constantes y predecibles en la marcha.', r:false },
-    { t:'S', q:'Me cuesta confrontar; prefiero buscar armonía.', r:false },
-    { t:'S', q:'Soy paciente con quienes vienen más lento.', r:false },
-    { t:'S', q:'Me alteran los cambios repentinos de plan.', r:false },
-    { t:'S', q:'Me es fácil adaptarme a cambios bruscos sin explicación.', r:true  },
-    { t:'S', q:'Evito involucrarme cuando hay conflicto en el grupo.', r:true  },
-    { t:'S', q:'Suelo sostener a otros para que no abandonen.', r:false },
-    { t:'S', q:'Aprecio las rutinas porque dan estabilidad al equipo.', r:false },
-    { t:'S', q:'No me preocupa la cohesión del grupo.', r:true  },
-    { t:'S', q:'Aporto calma y constancia cuando aparecen dificultades.', r:false },
-    { t:'S', q:'Prefiero “dejarlo pasar” antes que discutir.', r:false },
-  ];
-  const C = [
-    { t:'C', q:'Planifico rutas, equipo y riesgos con detalle.', r:false },
-    { t:'C', q:'Antes de avanzar, reviso datos de clima y terreno.', r:false },
-    { t:'C', q:'Me incomoda improvisar sin analizar opciones.', r:false },
-    { t:'C', q:'Chequeo redundancias de seguridad (plan B/C).', r:false },
-    { t:'C', q:'Me entierro en detalles y pierdo la visión general.', r:true  },
-    { t:'C', q:'Actúo sin verificar si hay riesgos objetivos.', r:true  },
-    { t:'C', q:'Mantengo orden en campamento y material común.', r:false },
-    { t:'C', q:'Prefiero “a ojo” antes que medir y registrar.', r:true  },
-    { t:'C', q:'Sigo protocolos y listas para no olvidar nada.', r:false },
-    { t:'C', q:'Evito documentar lo aprendido en salidas.', r:true  },
-    { t:'C', q:'Analizo con calma antes de decidir un cruce dudoso.', r:false },
-    { t:'C', q:'Me cuesta respetar procedimientos y normas.', r:true  },
-  ];
+function option(name,value,label){
+  const id=`${name}_${value}`;
+  return `<li><input type="radio" id="${id}" name="${name}" value="${value}"><label for="${id}">${label}</label></li>`;
+}
 
-  // 2 extras para compensar (menos sesgo hacia C)
-  const EXTRA = [
-    { t:'D', q:'Si el tiempo apremia, priorizo decidir y ejecutar.', r:false },
-    { t:'I', q:'Me ocupo de que nadie quede afuera en el grupo.', r:false },
-  ];
+/* ---------- ÍTEMS (14 por D/I/S/C) ---------- */
+const ITEMS = [
+  /* D — Dominancia (14) */
+  {t:'D',q:'Cuando el grupo se traba, propongo un plan y pongo tiempos sobre la mesa.',r:false},
+  {t:'D',q:'Prefiero decidir rápido aunque haya incertidumbre razonable.',r:false},
+  {t:'D',q:'Si dos opciones son similares, pido que decidan otros.',r:true},
+  {t:'D',q:'Ante un error mío, asumo la responsabilidad sin demoras.',r:false},
+  {t:'D',q:'Evito confrontar decisiones aun si creo que afectan la seguridad.',r:true},
+  {t:'D',q:'Cuando hay presión, me enfoco y ejecuto sin dispersarme.',r:false},
+  {t:'D',q:'Si el terreno cambia, adapto el plan y doy instrucciones claras.',r:false},
+  {t:'D',q:'Prefiero seguir antes que liderar, incluso si tengo un plan claro.',r:true},
+  {t:'D',q:'Puedo decir “no” aunque a otros no les guste.',r:false},
+  {t:'D',q:'Me paraliza decidir si falta información perfecta.',r:true},
+  {t:'D',q:'Prefiero decisiones claras a debates extensos.',r:false},
+  {t:'D',q:'Cuando algo no funciona, corto por lo sano y pruebo otra cosa.',r:false},
+  {t:'D',q:'Con rachas de 70–80 km/h en el filo, organizo rápido y reduzco exposición.',r:false},
+  {t:'D',q:'Whiteout complicado: espero que alguien más defina el rumbo.',r:true},
 
-  return [...D, ...I, ...S, ...C, ...EXTRA]; // 50
-})();
+  /* I — Influencia (14) */
+  {t:'I',q:'Ayudo a que las personas nuevas se sientan parte del grupo.',r:false},
+  {t:'I',q:'Me sale celebrar avances para mantener la moral alta.',r:false},
+  {t:'I',q:'Prefiero no hablar en voz alta aunque el ánimo esté bajo.',r:true},
+  {t:'I',q:'Si hay tensión, puedo traducir y acercar posturas.',r:false},
+  {t:'I',q:'Me cuesta reconocer el esfuerzo de los demás en el momento.',r:true},
+  {t:'I',q:'Disfruto contar el plan de forma clara y motivante.',r:false},
+  {t:'I',q:'Cuando el grupo está cansado, tiendo a aislarme.',r:true},
+  {t:'I',q:'Me interesa que todos tengan espacio para opinar.',r:false},
+  {t:'I',q:'Evito proponer ideas por temor a que las descarten.',r:true},
+  {t:'I',q:'Puedo comunicar malas noticias cuidando el vínculo.',r:false},
+  {t:'I',q:'Ascenso nocturno y frío: mantengo la moral con objetivos cortos y claros.',r:false},
+  {t:'I',q:'Retiro por seguridad: comunico con empatía para sostener cohesión.',r:false},
+  {t:'I',q:'Con fatiga alta, prefiero no hablar para “no gastar energía”.',r:true},
+  {t:'I',q:'Antes de una pasada expuesta, alineo al grupo con check breve y positivo.',r:false},
 
-/* ===== DOM ===== */
-const qsWrap = document.getElementById('questions');
+  /* S — Estabilidad (14) */
+  {t:'S',q:'Elijo ritmos constantes y previsibles antes que cambios bruscos.',r:false},
+  {t:'S',q:'Ofrezco ayuda emocional cuando alguien la pasa mal.',r:false},
+  {t:'S',q:'Los cambios de último minuto me resultan estimulantes.',r:true},
+  {t:'S',q:'Prefiero acordar bien los roles para evitar roces.',r:false},
+  {t:'S',q:'Si hay conflicto, me alejo y dejo que se arregle solo.',r:true},
+  {t:'S',q:'Soy paciente con quienes vienen más lento.',r:false},
+  {t:'S',q:'Aprecio las rutinas porque ordenan al equipo.',r:false},
+  {t:'S',q:'Me cuesta sostener el apoyo cuando yo también estoy cansado.',r:true},
+  {t:'S',q:'Intento que todos estén informados para bajar la ansiedad.',r:false},
+  {t:'S',q:'Prefiero evitar conversaciones difíciles aunque sean necesarias.',r:true},
+  {t:'S',q:'Sostengo tareas repetitivas sin perder la calma.',r:false},
+  {t:'S',q:'La armonía del grupo no es un factor que considere.',r:true},
+  {t:'S',q:'Ante un cambio brusco, pido una pausa breve para ordenar y sigo.',r:false},
+  {t:'S',q:'Si hay tensión, saco el tema en privado antes que ignorarlo.',r:false},
+
+  /* C — Concienzudo (14) */
+  {t:'C',q:'Planifico rutas, riesgos y equipo con criterio y método.',r:false},
+  {t:'C',q:'Reviso pronóstico y variantes antes de decidir.',r:false},
+  {t:'C',q:'Me siento cómodo improvisando sin datos claros.',r:true},
+  {t:'C',q:'Sigo listas y protocolos para no olvidar nada.',r:false},
+  {t:'C',q:'Me pierdo en detalles y olvido el objetivo general.',r:true},
+  {t:'C',q:'Registro aprendizajes para mejorar salidas futuras.',r:false},
+  {t:'C',q:'Ignoro chequeos si el grupo tiene apuro.',r:true},
+  {t:'C',q:'Me gusta medir (tiempos, desnivel, consumo) para decidir mejor.',r:false},
+  {t:'C',q:'Evito documentar porque “desgana” el momento.',r:true},
+  {t:'C',q:'En pasos dudosos, analizo opciones y explico el porqué.',r:false},
+  {t:'C',q:'Me cuesta respetar procedimientos cuando hay presión.',r:true},
+  {t:'C',q:'Mantengo orden en campamento y material común.',r:false},
+  {t:'C',q:'Prefiero decidir por intuición aun cuando hay datos.',r:true},
+  {t:'C',q:'Ajusto el plan si la evidencia contradice la idea original.',r:false},
+];
+
+/* ---------- DOM ---------- */
 const form = document.getElementById('discForm');
+const qsWrap = document.getElementById('questions');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
 const btnResult = document.getElementById('btnResult');
-const btnReset = document.getElementById('btnReset');
-const resultCard = document.getElementById('resultCard');
+const btnReset  = document.getElementById('btnReset');
 
 const elType = document.getElementById('resultType');
 const elPct  = document.getElementById('resultPct');
@@ -88,240 +91,161 @@ const elStr  = document.getElementById('strengths');
 const elImp  = document.getElementById('toImprove');
 const elClosing = document.getElementById('closingType');
 
-/* ===== UTILS ===== */
-function shuffle(arr){
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-function option(name, value, label){
-  const id = `${name}_${value}`;
-  return `
-    <li>
-      <input type="radio" id="${id}" name="${name}" value="${value}" />
-      <label for="${id}">${label}</label>
-    </li>
-  `;
-}
-
-/* ===== RENDER PREGUNTAS ===== */
-let renderedQuestions = [];
+/* ---------- Render fijo (56 ítems) ---------- */
 function renderQuestions(){
-  const mixed = shuffle(QUESTIONS);
-  renderedQuestions = mixed.map((item, idx) => ({...item, name:`q${idx}`}));
-
-  qsWrap.innerHTML = renderedQuestions.map((it, i) => `
+  qsWrap.innerHTML = ITEMS.map((it,idx)=>`
     <div class="question">
-      <h4>${i+1}. ${it.q}</h4>
+      <h4>${idx+1}. ${it.q}</h4>
       <ul class="opts">
-        ${option(it.name, 0, 'En desacuerdo')}
-        ${option(it.name, 1, 'Neutral')}
-        ${option(it.name, 2, 'De acuerdo')}
+        ${option(`q${idx}`,0,'En desacuerdo')}
+        ${option(`q${idx}`,1,'Neutral')}
+        ${option(`q${idx}`,2,'De acuerdo')}
       </ul>
     </div>
   `).join('');
 
-  // Actualiza progreso al cambiar
-  form.querySelectorAll('input[type="radio"]').forEach(r=>{
-    r.addEventListener('change', updateProgress);
-  });
+  form.querySelectorAll('input[type="radio"]').forEach(r=>r.addEventListener('change',updateProgress));
   updateProgress();
 }
 renderQuestions();
 
-/* ===== PROGRESO ===== */
+/* ---------- Progreso ---------- */
 function updateProgress(){
-  const total = renderedQuestions.length;
+  const total = ITEMS.length;
   const checked = new Set();
-  form.querySelectorAll('input[type="radio"]:checked').forEach(r => checked.add(r.name));
+  form.querySelectorAll('input[type="radio"]:checked').forEach(r=>checked.add(r.name));
   const done = checked.size;
-
   progressBar.style.width = `${(done/total)*100}%`;
   progressText.textContent = `${done} / ${total}`;
 }
 
-/* ===== CÁLCULO ===== */
+/* ---------- Cálculo ---------- */
 function computeScores(){
-  const totals = {D:0, I:0, S:0, C:0};
-  const counts = {D:0, I:0, S:0, C:0};
+  const totals = {D:0,I:0,S:0,C:0};
+  const counts = {D:0,I:0,S:0,C:0};
 
-  for(const it of renderedQuestions){
-    const node = form.querySelector(`input[name="${it.name}"]:checked`);
-    if(!node) return null; // faltan respuestas
-    let v = parseInt(node.value,10); // 0,1,2
-    if(it.r) v = 2 - v;              // invertido
-    totals[it.t] += v;
-    counts[it.t] += 1;
+  for(let i=0;i<ITEMS.length;i++){
+    const it = ITEMS[i];
+    const node = form.querySelector(`input[name="q${i}"]:checked`);
+    if(!node) return null;
+    let v = parseInt(node.value,10); // 0-1-2
+    if(it.r) v = 2 - v;
+    totals[it.t]+=v; counts[it.t]+=1;
   }
-  // % por factor (0..100)
-  const pct = {};
+  const pct={};
   for(const k of ['D','I','S','C']){
-    const max = counts[k] * 2;
-    pct[k] = max>0 ? Math.round( (totals[k]/max)*100 ) : 0;
+    const max = counts[k]*2;
+    pct[k] = max? Math.round((totals[k]/max)*100):0;
   }
-  return {totals, counts, pct};
+  return {pct};
 }
 
-/* ===== TEXTO POR PERFIL ===== */
+/* ---------- Textos ---------- */
 const PROFILE_TEXT = {
-  D: {
-    name: 'Dominante (D)',
-    contrib: 'Lidera decisiones rápidas, motivador ante retos físicos.',
-    strengths: 'Determinación, foco en objetivos, coraje para decidir.',
-    improve: 'Impaciencia; puede ignorar dudas de otros.'
-  },
-  I: {
-    name: 'Influyente (I)',
-    contrib: 'Animador del equipo, mantiene la cohesión social.',
-    strengths: 'Energía, comunicación positiva, integración.',
-    improve: 'Desorganización; puede omitir detalles técnicos.'
-  },
-  S: {
-    name: 'Estable (S)',
-    contrib: 'Fomenta la constancia, apoyo emocional y solidaridad.',
-    strengths: 'Paciencia, empatía, ritmos sostenidos.',
-    improve: 'Reacio al cambio; evita confrontaciones.'
-  },
-  C: {
-    name: 'Concienzudo (C)',
-    contrib: 'Planifica rutas, cuida la seguridad y equipamiento, analítico.',
-    strengths: 'Orden, método, prevención de riesgos.',
-    improve: 'Exceso de cautela; puede ralentizar al grupo.'
-  }
+  D:{name:'Dominante (D)',contrib:'Lidera decisiones rápidas; empuja en retos físicos.',strengths:'Determinación, foco, coraje para decidir.',improve:'Impaciencia; puede pasar por alto dudas ajenas.'},
+  I:{name:'Influyente (I)',contrib:'Anima y cohesiona al equipo.',strengths:'Energía, comunicación positiva, integración.',improve:'Puede omitir detalles o desordenarse.'},
+  S:{name:'Estable (S)',contrib:'Constancia, apoyo emocional, solidaridad.',strengths:'Paciencia, empatía, ritmos sostenidos.',improve:'Evita confrontaciones; le cuestan cambios.'},
+  C:{name:'Concienzudo (C)',contrib:'Planificación, seguridad, análisis.',strengths:'Orden, método, prevención de riesgos.',improve:'Exceso de cautela; puede enlentecer.'},
 };
 
-/* ===== RESULTADOS + MATRIZ ===== */
-btnResult.addEventListener('click', () => {
-  const res = computeScores();
-  if(!res){
-    alert('Te faltan preguntas por responder.');
-    return;
-  }
-  const {pct} = res;
-  const entries = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
-  const [topKey, topVal] = entries[0];
-
-  // Pintamos textos
-  const T = PROFILE_TEXT[topKey];
-  elType.textContent = `${T.name}`;
-  elPct.textContent = `${topVal}%`;
-  elGC.textContent = T.contrib;
-  elStr.textContent = T.strengths;
-  elImp.textContent = T.improve;
-  elClosing.textContent = `${T.name}`;
-
-  // Colocamos el marcador en la matriz
-  updateDiscMatrixMarker(pct);
-
-  resultCard.classList.remove('hidden');
-  // scroll
-  resultCard.scrollIntoView({behavior:'smooth', block:'start'});
-});
-
-btnReset.addEventListener('click', () => {
-  form.reset();
-  updateProgress();
-  resultCard.classList.add('hidden');
-  // reordenar preguntas para un nuevo intento
-  renderQuestions();
-});
-
-/* ---------------- MATRIZ DISC CON MARCADOR ---------------- */
+/* ---------- Imagen + marcador ---------- */
 function updateDiscMatrixMarker(scores){
   const img = document.getElementById('discMatrixImg');
   const marker = document.getElementById('discMarker');
   if(!img || !marker) return;
 
-  const place = () => {
-    const wrap = img.getBoundingClientRect();
-    const w = wrap.width, h = wrap.height;
-    const cx = w/2, cy = h/2;
+  const place = ()=>{
+    const rect = img.getBoundingClientRect();
+    const w=rect.width, h=rect.height, cx=w/2, cy=h/2;
 
-    const total = Math.max(1, (scores.D||0)+(scores.I||0)+(scores.S||0)+(scores.C||0));
-    const D = (scores.D||0)/total;
-    const I = (scores.I||0)/total;
-    const S = (scores.S||0)/total;
-    const C = (scores.C||0)/total;
+    // Vector simple: derecha = I, izquierda = C, arriba = D, abajo = S
+    const total = Math.max(1,(scores.D||0)+(scores.I||0)+(scores.S||0)+(scores.C||0));
+    const vx = (scores.I||0)/total - (scores.C||0)/total; // -1 .. 1
+    const vy = (scores.S||0)/total - (scores.D||0)/total; // -1 .. 1
+    const R = Math.min(w,h)*0.36; // radio útil dentro de la imagen
 
-    const vx = I - C;   // derecha - izquierda
-    const vy = S - D;   // abajo   - arriba
-    const radius = Math.min(w,h)*0.36;
-
-    const x = cx + vx*radius;
-    const y = cy + vy*radius;
-
-    marker.style.left = `${x}px`;
-    marker.style.top  = `${y}px`;
+    marker.style.left = `${cx + vx*R}px`;
+    marker.style.top  = `${cy + vy*R}px`;
   };
 
-  if (img.complete) place();
-  else img.onload = place;
+  if(img.complete) place(); else img.onload = place;
 }
 
-/* ----------- Exportar imagen y compartir ----------- */
+/* Render PNG de la imagen + marker */
 async function renderDiscMatrixPNG(){
   const img = document.getElementById('discMatrixImg');
   const marker = document.getElementById('discMarker');
-  return new Promise(resolve=>{
-    const make = () => {
-      const rect = img.getBoundingClientRect();
-      const w = Math.max(320, Math.round(rect.width));
-      const h = Math.max(240, Math.round(rect.height));
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d');
-
-      const base = new Image();
-      base.crossOrigin = 'anonymous';
-      base.onload = () => {
-        ctx.drawImage(base, 0, 0, w, h);
-
-        const wrapRect = img.getBoundingClientRect();
-        const mx = parseFloat(marker.style.left) || wrapRect.width/2;
-        const my = parseFloat(marker.style.top)  || wrapRect.height/2;
-        const rx = (mx / wrapRect.width) * w;
-        const ry = (my / wrapRect.height) * h;
-
-        const r = Math.max(7, Math.round(Math.min(w,h) * 0.012));
-        ctx.beginPath();
-        ctx.arc(rx, ry, r+5, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(255,208,138,0.35)';
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(rx, ry, r, 0, Math.PI*2);
-        ctx.fillStyle = '#ffd08a';
-        ctx.fill();
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = 'rgba(0,0,0,.55)';
-        ctx.stroke();
-
-        resolve(canvas.toDataURL('image/png'));
+  return new Promise(res=>{
+    const go = ()=>{
+      const r=img.getBoundingClientRect(), w=Math.max(320,Math.round(r.width)), h=Math.max(240,Math.round(r.height));
+      const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d');
+      const base=new Image(); base.crossOrigin='anonymous';
+      base.onload=()=>{
+        ctx.drawImage(base,0,0,w,h);
+        // traducir marker
+        const mx=parseFloat(marker.style.left)||r.width/2;
+        const my=parseFloat(marker.style.top)||r.height/2;
+        const rx=(mx/r.width)*w, ry=(my/r.height)*h;
+        const rr=Math.max(7,Math.round(Math.min(w,h)*.012));
+        ctx.beginPath(); ctx.arc(rx,ry,rr+5,0,Math.PI*2); ctx.fillStyle='rgba(255,208,138,.35)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(rx,ry,rr,0,Math.PI*2); ctx.fillStyle='#ffd08a'; ctx.fill();
+        ctx.lineWidth=4; ctx.strokeStyle='rgba(0,0,0,.55)'; ctx.stroke();
+        res(c.toDataURL('image/png'));
       };
       base.src = img.currentSrc || img.src;
     };
-    if (img.complete) make(); else img.onload = make;
+    if(img.complete) go(); else img.onload=go;
   });
 }
 
-document.getElementById('btnDownload').addEventListener('click', async ()=>{
-  const dataURL = await renderDiscMatrixPNG();
-  const a = document.createElement('a');
-  a.href = dataURL;
-  a.download = 'disc_resultado.png';
-  a.click();
+/* ---------- Eventos ---------- */
+document.getElementById('btnResult').addEventListener('click',()=>{
+  const r=computeScores();
+  if(!r){ alert('Te faltan respuestas.'); return; }
+  const {pct}=r;
+  const entries = Object.entries(pct).sort((a,b)=>b[1]-a[1]);
+  const [topKey,topVal] = entries[0];
+  const T=PROFILE_TEXT[topKey];
+
+  document.getElementById('resultType').textContent=T.name;
+  document.getElementById('resultPct').textContent=`${topVal}%`;
+  document.getElementById('groupContribution').textContent=T.contrib;
+  document.getElementById('strengths').textContent=T.strengths;
+  document.getElementById('toImprove').textContent=T.improve;
+  document.getElementById('closingType').textContent=T.name;
+
+  updateDiscMatrixMarker({
+    D:pct.D||0, I:pct.I||0, S:pct.S||0, C:pct.C||0
+  });
+
+  const card = document.getElementById('resultCard');
+  card.classList.remove('hidden');
+  card.scrollIntoView({behavior:'smooth',block:'start'});
 });
 
-document.getElementById('btnWhatsApp').addEventListener('click', async ()=>{
-  // WhatsApp no permite adjuntar un PNG generado desde el navegador sin interacción nativa;
-  // Compartimos el link + sugerimos descargar la imagen con el botón anterior.
-  const texto = encodeURIComponent(
-    `Mi perfil DISC en Montaña Malargüe 💪🏔️%0A` +
-    `Hice el test y este es mi resultado. Hacé el tuyo acá:%0A` +
-    `${location.href}`
-  );
-  window.open(`https://wa.me/?text=${texto}`, '_blank');
+document.getElementById('btnReset').addEventListener('click',()=>{
+  document.getElementById('resultCard').classList.add('hidden');
+  document.getElementById('discForm').reset();
+  // reset progreso
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  progressBar.style.width='0%'; progressText.textContent='0 / 56';
 });
+
+document.getElementById('btnDownload').addEventListener('click',async()=>{
+  const dataURL=await renderDiscMatrixPNG();
+  const a=document.createElement('a'); a.href=dataURL; a.download='disc_resultado.png'; a.click();
+});
+
+document.getElementById('btnWhatsApp').addEventListener('click',()=>{
+  // Nota: WhatsApp no acepta adjuntar imagen local desde web sin servidor.
+  // Compartimos texto + link (si la página está publicada, se comparte la URL).
+  const texto=encodeURIComponent(
+    `Mi perfil DISC en Montaña Malargüe 💪🏔️\nProbá el test acá:\n${location.href}`
+  );
+  window.open(`https://wa.me/?text=${texto}`,'_blank');
+});
+
+/* Inicial: mostrar progreso en 0 */
+updateProgress();
+
