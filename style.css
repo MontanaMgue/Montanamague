@@ -16,35 +16,56 @@ html,body{
   color:var(--text); font-family:Arial, Helvetica, sans-serif;
 }
 
+/* ------------ HEADER ------------ */
 .hero{
   background: var(--brand);
   text-align:center;
   padding:32px 16px 40px;
   position:relative;
+  overflow:hidden;
 }
 .hero::after{
   content:"";
   position:absolute; inset:0;
-  background-image: url('bg.jpg'); /* tu foto de fondo */
-  background-size: cover; background-position:center;
-  opacity:.18; mix-blend-mode:multiply; pointer-events:none;
+  background-image: url('bg.jpg');
+  background-size: cover;       
+  background-position:center 30%;
+  background-repeat:no-repeat;
+  opacity:.18;
+  mix-blend-mode:multiply;
+  pointer-events:none;
 }
-.logo{ width:88px; display:block; margin:0 auto 8px; border-radius:50%; background:#fff2; padding:6px }
+.logo{ 
+  width:88px; display:block; margin:0 auto 8px; 
+  border-radius:50%; background:#fff2; padding:6px 
+}
 .hero h1{ margin:0; font-size:2rem }
 .hero p{ margin:.35rem 0 0; color:#fff; opacity:.9 }
 
+/* ------------ BODY ------------ */
 main{
   position:relative;
   min-height: calc(100vh - 220px);
-  background-image: url('bg.jpg');  /* misma imagen de fondo */
-  background-size: cover; background-position:center;
+
+  /* ✅ Fondo con IMAGEN COMPLETA, SIN deformar */
+  background:#000;
+  background-image: url('bg.jpg');
+  background-size: contain !important;   /* ✅ Ajusta sin deformar */
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   padding:24px 16px 64px;
 }
+
 main::before{
-  content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(0,0,0,.5), rgba(0,0,0,.8));
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.60), rgba(0,0,0,.95));
   pointer-events:none;
 }
+
+/* ------------ CARDS ------------ */
 .card{
   position:relative; z-index:1;
   background:var(--card);
@@ -55,6 +76,8 @@ main::before{
   backdrop-filter: blur(4px);
 }
 .info{ font-size:.95rem; color:#f1f1f1 }
+
+/* ------------ PROGRESS BAR ------------ */
 .progress-wrap{
   z-index:1; position:relative; max-width:980px; margin:8px auto 12px;
   display:flex; align-items:center; gap:10px; color:var(--muted);
@@ -69,6 +92,7 @@ main::before{
 }
 #progressText{ min-width:70px; text-align:right; font-size:.9rem }
 
+/* ------------ QUESTIONS ------------ */
 .question{
   margin:14px 0 18px;
   padding:14px 14px 8px;
@@ -85,6 +109,7 @@ main::before{
 .opts input[type="radio"]{ accent-color:var(--accent); transform:scale(1.1) }
 .opts label{ cursor:pointer }
 
+/* ------------ BUTTONS ------------ */
 .actions{
   z-index:1; position:relative;
   max-width:980px; margin:10px auto 22px;
@@ -100,6 +125,7 @@ button.secondary{ background:#2c2c2c; }
 button.secondary:hover{ background:#404040 }
 button:disabled{ opacity:.5; cursor:not-allowed }
 
+/* ------------ RESULTS ------------ */
 .result-title{ font-size:1.05rem; margin:.5rem 0 1rem }
 .summary-grid{
   display:grid; gap:14px; grid-template-columns:repeat(3,1fr);
@@ -118,9 +144,20 @@ button:disabled{ opacity:.5; cursor:not-allowed }
   border-top:1px dashed #ffffff22; padding-top:10px;
 }
 
+/* ------------ FOOTER ------------ */
 .footer{
   position:relative; z-index:1; text-align:center;
   color:#d0d0d0; font-size:.9rem; margin-top:18px;
   opacity:.85;
 }
+
+/* ------------ GENERAL ------------ */
 .hidden{ display:none }
+/* ✅ Ajuste especial para celulares */
+@media (max-width: 768px) {
+  main {
+    background-size: cover !important; /* Llenar pantalla sin bandas */
+    background-position: center center;
+    background-attachment: scroll; /* Evita saltos al scrollear en iPhone */
+  }
+}
