@@ -10,7 +10,7 @@
   --wa:#25d366;
 }
 
-*{box-sizing:border-box}
+*{ box-sizing:border-box }
 html,body{
   margin:0; padding:0; background:#000;
   color:var(--text); font-family:Arial, Helvetica, sans-serif;
@@ -27,8 +27,8 @@ html,body{
 .hero::after{
   content:"";
   position:absolute; inset:0;
-  background-image: url('bg.jpg');
-  background-size: cover;
+  background-image: url('bg.jpg');   /* 👉 tu foto de portada general */
+  background-size: cover;            /* llena sin deformar */
   background-position:center 30%;
   background-repeat:no-repeat;
   opacity:.18;
@@ -42,19 +42,17 @@ html,body{
 .hero h1{ margin:0; font-size:2rem }
 .hero p{ margin:.35rem 0 0; color:#fff; opacity:.9 }
 
-/* ------------ BODY ------------ */
+/* ------------ BODY (fondo controlado) ------------ */
 main{
   position:relative;
   min-height: calc(100vh - 220px);
-
-  /* ✅ Fondo con IMAGEN COMPLETA, SIN deformar (desktop) */
   background:#000;
+  /* Fondo general de la página (no desbordado) */
   background-image: url('bg.jpg');
-  background-size: contain !important;
+  background-size: contain;       /* ✅ se ajusta a la página sin deformarse */
   background-position: top center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-
+  background-attachment: fixed;   /* efecto sutil en desktop */
   padding:24px 16px 64px;
 }
 main::before{
@@ -108,6 +106,24 @@ main::before{
 .opts input[type="radio"]{ accent-color:var(--accent); transform:scale(1.1) }
 .opts label{ cursor:pointer }
 
+/* ------------ RESULT IMG + MARKER ------------ */
+.matrix-wrap{
+  position:relative; margin:8px 0 14px;
+  border:1px dashed #ffffff30; border-radius:12px; overflow:hidden;
+  background:#0a0a0a;
+}
+.matrix-wrap img{
+  display:block; width:100%; height:auto; 
+  max-height:520px; object-fit:contain; /* ✅ no se deforma */
+  background:#000;
+}
+.marker{
+  position:absolute; width:14px; height:14px; border-radius:50%;
+  background:var(--accent); border:3px solid rgba(0,0,0,.55);
+  box-shadow: 0 0 0 6px rgba(255,208,138,.35);
+  transform: translate(-50%, -50%);
+}
+
 /* ------------ BUTTONS ------------ */
 .actions{
   z-index:1; position:relative;
@@ -124,7 +140,7 @@ button.secondary{ background:#2c2c2c; }
 button.secondary:hover{ background:#404040 }
 button:disabled{ opacity:.5; cursor:not-allowed }
 
-/* ------------ RESULTS ------------ */
+/* ------------ RESULT TEXTS ------------ */
 .result-title{ font-size:1.05rem; margin:.5rem 0 1rem }
 .summary-grid{
   display:grid; gap:14px; grid-template-columns:repeat(3,1fr);
@@ -135,8 +151,8 @@ button:disabled{ opacity:.5; cursor:not-allowed }
 .chart-actions{
   margin:12px 0 0; display:flex; gap:10px; flex-wrap:wrap;
 }
-.whatsapp{ background:var(--wa); }
-.whatsapp:hover{ background:#1ebe5a; }
+.whatsapp{ background:var(--wa) }
+.whatsapp:hover{ background:#1ebe5a }
 
 .closing{
   margin-top:14px; color:#f1f1f1; font-style:italic;
@@ -153,39 +169,14 @@ button:disabled{ opacity:.5; cursor:not-allowed }
 /* ------------ GENERAL ------------ */
 .hidden{ display:none }
 
-/* === MATRIZ DISC CON IMAGEN + MARCADOR === */
-.disc-matrix{
-  position: relative;
-  max-width: 780px;
-  margin: 8px auto 0;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #ffffff22;
-  background: #0b0b0b;
-}
-.disc-matrix img{
-  display:block;
-  width:100%;
-  height:auto;              /* ✅ NO se deforma */
-  object-fit: contain;      /* ✅ Mantiene proporción */
-  filter: brightness(.92) contrast(1.02);
-}
-.disc-marker{
-  position: absolute;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: #ffd08a;
-  border: 3px solid rgba(0,0,0,.55);
-  box-shadow: 0 0 0 3px rgba(255,208,138,.28), 0 0 8px rgba(0,0,0,.35);
-  transform: translate(-50%, -50%);
-}
-
-/* ✅ Ajuste especial para celulares */
+/* ✅ Mobile tuning */
 @media (max-width: 768px) {
   main {
-    background-size: cover !important;   /* Llenar pantalla sin bandas */
-    background-position: center center;
-    background-attachment: scroll;       /* Evita saltos al scroll en iOS */
+    background-size: cover;      /* llena alto/alto en móviles */
+    background-position: center;
+    background-attachment: scroll; /* evita saltos en iOS */
   }
-  .disc-marker{ width:16px; height:16px; }
+  .matrix-wrap img{
+    max-height: 62vh; /* que no se “coma” toda la pantalla */
+  }
 }
