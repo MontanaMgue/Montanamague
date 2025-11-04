@@ -1,46 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test de Personalidad DISC — Montaña</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test DISC — Montaña Malargüe</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-
-<header class="topbar">
-    <img src="assets/logo.png" class="logo" alt="Logo Montaña Malargüe">
+  <header class="topbar">
+    <img src="assets/logo.png" class="logo" alt="Logo Montaña Malargüe"/>
     <h1>Test de Personalidad DISC</h1>
     <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña</p>
-</header>
+  </header>
 
-<main>
+  <main>
+    <section class="notice">
+      <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
+    </section>
 
-<section class="notice">
-    <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
-</section>
+    <form id="discTestForm" class="form"></form>
 
-<form id="discTestForm">
+    <div class="actions">
+      <button type="button" id="submitBtn" class="send">Ver Resultado</button>
+      <button type="button" id="restartBtn" class="ghost">Reiniciar test</button>
+    </div>
 
-<!-- 🔽 🔽 🔽 PEGA TUS 99 PREGUNTAS ORIGINALES ACÁ 🔽 🔽 🔽 -->
+    <section id="result" class="hidden">
+      <h2>Resultado: <span id="resultType"></span></h2>
+      <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
+      <p><strong>Debilidades:</strong> <span id="strengths"></span></p>
+      <p><strong>Recomendaciones:</strong> <span id="toImprove"></span></p>
+    </section>
+  </main>
 
-<!-- EJEMPLO (BORRAR AL PEGAR TUS PREGUNTAS) -->
-<label for="q0">Ejemplo de pregunta (BORRAR y pegar tus 99)</label>
-<select name="q0">
-    <option value="1">Muy en desacuerdo</option>
-    <option value="2">En desacuerdo</option>
-    <option value="3" selected>Neutral</option>
-    <option value="4">De acuerdo</option>
-    <option value="5">Muy de acuerdo</option>
-</select>
-<!-- FIN EJEMPLO -->
+  <footer>
+    Orientativo para formación. No es diagnóstico psicológico.
+  </footer>
 
-<!-- 🔼 🔼 🔼 PEGA TUS PREGUNTAS ACÁ 🔼 🔼 🔼 -->
-
-<button type="submit" class="send">Ver Resultado</button>
-</form>
-
-<section id="result" class="hidden">
-    <h2>Resultado: <span id="resultType"></span></h2>
-    <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
-    <p><
+  <script src="script.js"></script>
+</body>
+</html>
