@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Test DISC — Montaña Malargüe</title>
   <link rel="stylesheet" href="style.css"/>
+  <!-- Chart.js para la brújula DISC -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -27,6 +29,15 @@
 
     <section id="result" class="hidden">
       <h2>Resultado: <span id="resultType"></span></h2>
+
+      <!-- Brújula DISC -->
+      <div class="chart-wrap">
+        <canvas id="discChart" width="460" height="360" aria-label="Brújula DISC" role="img"></canvas>
+        <ul class="chart-legend" id="chartLegend">
+          <!-- Se rellena por JS con % -->
+        </ul>
+      </div>
+
       <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
       <p><strong>Debilidades:</strong> <span id="strengths"></span></p>
       <p><strong>Recomendaciones:</strong> <span id="toImprove"></span></p>
@@ -37,6 +48,4 @@
     Orientativo para formación. No es diagnóstico psicológico.
   </footer>
 
-  <script src="script.js"></script>
-</body>
-</html>
+  <script src="script.js"></scri
