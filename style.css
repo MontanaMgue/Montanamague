@@ -1,118 +1,128 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
+/* Fondo general con foto */
+:root{
+  --orange:#e96b00;
+  --orange-dark:#c45b00;
+  --glass: rgba(0,0,0,0.55);
+  --glass-soft: rgba(0,0,0,0.35);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Arial, Helvetica, sans-serif;
+  color:#fff;
+  background:#111 url("assets/bg.jpg") center/cover fixed no-repeat;
 }
 
-/* Header */
-header {
-    background-color: #e96b00;
-    color: white;
-    text-align: center;
-    padding: 1.2rem 0;
+/* Cinta superior */
+.topbar{
+  background:var(--orange);
+  text-align:center;
+  padding:22px 10px 28px;
 }
-.logo {
-    width: 80px;
-    margin: 10px auto;
+.logo{
+  width:110px;
+  height:auto;
+  display:block;
+  margin:0 auto 10px;
 }
-
-/* Main Card */
-main {
-    max-width: 850px;
-    margin: 20px auto;
-    padding: 1rem 1.4rem;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.topbar h1{
+  margin:0 0 6px;
+  font-size:34px;
+  line-height:1.2;
 }
-
-/* Form */
-form label {
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
-    color: #333;
-    line-height: 1.3;
-}
-select {
-    width: 100%;
-    padding: 8px;
-    margin: 6px 0 10px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+.topbar p{
+  margin:0;
+  opacity:.95;
 }
 
-/* Buttons */
-button {
-    background-color: #e96b00;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 15px;
-    width: 100%;
-    font-weight: bold;
+/* Contenedor principal con efecto vidrio */
+main{
+  max-width:1000px;
+  margin:30px auto 50px;
+  padding:20px;
+  backdrop-filter: blur(2px);
 }
-button:hover {
-    background-color: #c45b00;
-}
-
-/* Notice text (escala info) */
-.notice {
-    background: #fff3e1;
-    border-left: 4px solid #e96b00;
-    padding: 10px 14px;
-    margin-bottom: 18px;
-    border-radius: 4px;
-    font-size: 0.95rem;
+.notice{
+  background: var(--glass-soft);
+  border:1px solid rgba(255,255,255,.25);
+  border-left:4px solid var(--orange);
+  padding:10px 14px;
+  border-radius:8px;
+  margin:0 auto 18px;
 }
 
-/* Result box */
-#result {
-    margin-top: 25px;
-    background-color: #fff6d5;
-    padding: 1.2rem;
-    border-radius: 6px;
-    border: 1px solid #ffd889;
+/* Bloques de preguntas (se generan por JS) */
+.question-block{
+  background: var(--glass);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  padding:18px 18px 6px;
+  margin:0 auto 18px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.35);
 }
-#result h2 {
-    margin-top: 0;
-    font-size: 1.4rem;
-    color: #e96b00;
+.question-block legend{
+  font-weight:bold;
+  margin-bottom:8px;
 }
-#result p {
-    margin: 8px 0;
-    font-size: 1rem;
+.options{
+  list-style:none;
+  margin:0;
+  padding:0 4px 10px;
 }
-#result strong {
-    color: #b85a00;
+.options li{
+  padding:6px 0;
+  border-bottom:1px dashed rgba(255,255,255,.12);
+}
+.options li:last-child{ border-bottom:none; }
+
+/* Radios (los “puntitos”) */
+input[type="radio"]{
+  transform: translateY(1px);
+  margin-right:8px;
+  accent-color: var(--orange);
 }
 
-/* Disclaimer text */
-.disclaimer {
-    margin-top: 12px;
-    font-size: 0.9rem;
-    color: #555;
-    font-style: italic;
+/* Botones */
+button{
+  background: var(--orange);
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:8px;
+  font-size:1rem;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+button:hover{ background: var(--orange-dark); }
+
+/* Resultado */
+#result{
+  background: var(--glass);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:12px;
+  padding:18px;
+  margin-top:22px;
+}
+#result h2{
+  margin-top:0;
+  color:#ffe0bf;
+}
+#restartBtn{ margin-top:10px; }
+
+/* Footer */
+footer{
+  text-align:center;
+  opacity:.85;
+  margin-bottom:28px;
 }
 
-/* Aux */
-.hidden {
-    display: none;
-}
+/* Utilidad */
+.hidden{ display:none !important; }
 
 /* Responsive */
-@media (max-width: 600px) {
-    main {
-        margin: 10px;
-        padding: 0.8rem;
-    }
-    button {
-        font-size: 1rem;
-        padding: 10px;
-    }
+@media (max-width:680px){
+  .topbar h1{ font-size:26px; }
+  main{ padding:12px; margin:18px auto 30px; }
 }
-
