@@ -1,56 +1,118 @@
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
 }
+
+/* Header */
 header {
     background-color: #e96b00;
     color: white;
     text-align: center;
-    padding: 1rem 0;
+    padding: 1.2rem 0;
 }
 .logo {
     width: 80px;
     margin: 10px auto;
 }
+
+/* Main Card */
 main {
-    max-width: 800px;
+    max-width: 850px;
     margin: 20px auto;
-    padding: 1rem;
+    padding: 1rem 1.4rem;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+
+/* Form */
 form label {
     display: block;
-    margin-top: 10px;
+    margin-top: 12px;
     font-weight: bold;
+    color: #333;
+    line-height: 1.3;
 }
 select {
     width: 100%;
     padding: 8px;
-    margin-bottom: 10px;
+    margin: 6px 0 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
+
+/* Buttons */
 button {
     background-color: #e96b00;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 1rem;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    font-weight: bold;
 }
 button:hover {
     background-color: #c45b00;
 }
-#result {
-    margin-top: 20px;
-    background-color: #fff6d5;
-    padding: 1rem;
-    border-radius: 5px;
+
+/* Notice text (escala info) */
+.notice {
+    background: #fff3e1;
+    border-left: 4px solid #e96b00;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    border-radius: 4px;
+    font-size: 0.95rem;
 }
+
+/* Result box */
+#result {
+    margin-top: 25px;
+    background-color: #fff6d5;
+    padding: 1.2rem;
+    border-radius: 6px;
+    border: 1px solid #ffd889;
+}
+#result h2 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    color: #e96b00;
+}
+#result p {
+    margin: 8px 0;
+    font-size: 1rem;
+}
+#result strong {
+    color: #b85a00;
+}
+
+/* Disclaimer text */
+.disclaimer {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #555;
+    font-style: italic;
+}
+
+/* Aux */
 .hidden {
     display: none;
 }
+
+/* Responsive */
+@media (max-width: 600px) {
+    main {
+        margin: 10px;
+        padding: 0.8rem;
+    }
+    button {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
+
