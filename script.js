@@ -1,156 +1,165 @@
-// script.js — Test DISC (versión montaña) con escala de 3 puntos
-// Copiar y pegar tal cual junto a tu index.html (no requiere dependencias).
+// 1) Transforma cada <label + select> en un fieldset con 3 radios
+(function toThreeOptions(){
+  const form = document.getElementById('discTestForm');
+  if(!form) return;
 
-(function () {
-  const form = document.getElementById("discTestForm");
-  const resultBox = document.getElementById("result");
-  const resultType = document.getElementById("resultType");
-  const groupContribution = document.getElementById("groupContribution");
-  const strengths = document.getElementById("strengths"); // aquí mostraremos Debilidades
-  const toImprove = document.getElementById("toImprove"); // aquí mostraremos Recomendaciones
+  // Recolectamos pares label+select en orden
+  const nodes = Array.from(form.children);
+  for (let i = 0; i < nodes.length; i++) {
+    const label = nodes[i];
+    const select = nodes[i+1];
+    if (!label || !select || label.tagName !== 'LABEL' || select.tagName !== 'SELECT') continue;
 
-  // Mapeo de ítems -> escalas DISC (usa tus índices de preguntas)
-  const SCALES = {
-    C: [0,1,2,3,4,5,6,7,8,9,10, 37,38,39,40,41,42,43,44,45, 46,47,48,49,50,51,52,53],
-    S: [11,12,13,14,15,16,17,18,19, 74,75,76,77,78,79,80,81, 82,83,84,85,86,87,88,89, 90,91,92,93,94,95,96,97,98],
-    D: [21,22,23,24,25,26,27,28, 65,66,67,68,69,70,71,72,73],
-    I: [29,30,31,32,33,34,35,36, 54,55,56,57,58,59,60,61,62,63,64],
-  };
+    const name = select.getAttribute('name');
+    const legendText = label.textContent.trim();
 
-  // Ítems invertidos (si en el futuro agregas reversos, pon sus índices aquí)
-  const REVERSED = new Set([]);
+    // Fieldset
+    const fs = document.createElement('fieldset');
+    fs.className = 'question-block';
+    fs.innerHTML = `<legend>${legendText}</legend>`;
 
-  // Etiquetas
-  const LABELS = {
-    D: { name: "Dominante (D)", short: "Dominante" },
-    I: { name: "Influyente (I)", short: "Influyente" },
-    S: { name: "Estable (S)",    short: "Estable"    },
-    C: { name: "Concienzudo (C)",short: "Concienzudo"},
-  };
-
-  // Textos solicitados
-  const CONTRIBUTIONS = {
-    D: "Lidera decisiones rápidas, motivador ante retos físicos.",
-    I: "Animador del equipo, mantiene la cohesión social.",
-    S: "Fomenta la constancia, apoyo emocional y solidaridad.",
-    C: "Planifica rutas, cuida la seguridad y el equipamiento, analítico."
-  };
-
-  const WEAKNESSES = {
-    D: "Impaciente; puede ignorar dudas de otros.",
-    I: "Desorganizado; puede omitir detalles técnicos.",
-    S: "Reacio al cambio; evita confrontaciones.",
-    C: "Excesivamente cauteloso; puede ralentizar al grupo."
-  };
-
-  const RECOMMEND = {
-    D: "Hablar claro y directo; reconocer sus logros; pedir feedback en forma breve.",
-    I: "Involucrarlo en la motivación del grupo; valorar sus ideas creativas.",
-    S: "Asegurar su tranquilidad; explicar cambios con anticipación; agradecer su apoyo.",
-    C: "Proveer información detallada; respetar su ritmo; solicitar su ayuda en organización."
-  };
-
-  // Utilidades
-  function getAllQuestionNames() {
-    const names = new Set();
-    form.querySelectorAll('input[type="radio"]').forEach(r => {
-      if (r.name && /^q\d+$/.test(r.name)) names.add(r.name);
+    // Lista de opciones
+    const ul = document.createElement('ul');
+    ul.className = 'options';
+    const opts = [
+      { value: '1', label: 'En desacuerdo' },
+      { value: '2', label: 'Neutral' },
+      { value: '3', label: 'De acuerdo' },
+    ];
+    opts.forEach((o, idx) => {
+      const li = document.createElement('li');
+      const id = `${name}_${o.value}`;
+      li.innerHTML = `
+        <label for="${id}">
+          <input type="radio" id="${id}" name="${name}" value="${o.value}" ${idx===1?'checked':''} required />
+          ${o.label}
+        </label>`;
+      ul.appendChild(li);
     });
-    return Array.from(names).sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)));
+
+    fs.appendChild(ul);
+
+    // Reemplazo en el DOM
+    form.insertBefore(fs, label);
+    form.removeChild(label);
+    form.removeChild(select);
   }
 
-  // Mapea valores 1–5 a 1–3 automáticamente (1–2=En desacuerdo, 3=Neutral, 4–5=De acuerdo).
-  function toThreePoint(v) {
-    if (v == null) return null;
-    if (v >= 1 && v <= 3) return v;     // ya es 1–3
-    if (v >= 1 && v <= 5) return v <= 2 ? 1 : (v === 3 ? 2 : 3);
-    return null;
+  // Botón enviar (si no existe)
+  if (!form.querySelector('button[type="submit"]')) {
+    const submit = document.createElement('button');
+    submit.type = 'submit';
+    submit.textContent = 'Ver Resultado';
+    form.appendChild(submit);
   }
-
-  function readAnswers() {
-    const values = {};
-    form.querySelectorAll('input[type="radio"]:checked').forEach(r => {
-      values[r.name] = toThreePoint(Number(r.value));
-    });
-    return values;
-  }
-
-  function validateComplete() {
-    for (const n of getAllQuestionNames()) {
-      if (!form.querySelector(`input[name="${n}"]:checked`)) return false;
-    }
-    return true;
-  }
-
-  function scoreScale(values, indices) {
-    let sum = 0;
-    const max = indices.length * 3; // escala 1–3
-    indices.forEach(i => {
-      const v = values[`q${i}`];
-      if (typeof v === "number") {
-        const adjusted = REVERSED.has(i) ? (4 - v) : v; // invierte en 1–3 si corresponde
-        sum += adjusted;
-      }
-    });
-    const pct = Math.round((sum / max) * 100);
-    return { sum, max, pct };
-  }
-
-  function computeProfile(values) {
-    const byScale = {};
-    Object.keys(SCALES).forEach(k => byScale[k] = scoreScale(values, SCALES[k]));
-    const ordered = Object.entries(byScale)
-      .sort((a, b) => b[1].pct - a[1].pct)
-      .map(([scale, stats]) => ({ scale, ...stats }));
-    return { byScale, ordered };
-  }
-
-  function buildMessages(top1, top2) {
-    const code = `${top1.scale}${top2 ? top2.scale : ""}`;
-    const title = top2
-      ? `${LABELS[top1.scale].short} + ${LABELS[top2.scale].short} (${code})`
-      : `${LABELS[top1.scale].name}`;
-
-    const contrib = [CONTRIBUTIONS[top1.scale], top2 ? CONTRIBUTIONS[top2.scale] : ""]
-      .filter(Boolean).join(" ");
-    const weak = WEAKNESSES[top1.scale];
-    const recs = RECOMMEND[top1.scale];
-
-    return { title, contrib, weak, recs, top1Pct: top1.pct, top2Pct: top2 ? top2.pct : null };
-  }
-
-  // Submit
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    if (!validateComplete()) {
-      alert("Faltan respuestas. Por favor, completá todas las preguntas.");
-      const firstMissing = getAllQuestionNames()
-        .find(n => !form.querySelector(`input[name="${n}"]:checked`));
-      if (firstMissing) {
-        const el = form.querySelector(`input[name="${firstMissing}"]`);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-      return;
-    }
-
-    const values = readAnswers();
-    const { ordered } = computeProfile(values);
-    const top1 = ordered[0];
-    const top2 = ordered[1];
-
-    const { title, contrib, weak, recs, top1Pct, top2Pct } = buildMessages(top1, top2);
-
-    resultType.textContent = top2Pct != null
-      ? `${title} — ${top1Pct}% / ${top2Pct}%`
-      : `${title} — ${top1Pct}%`;
-    groupContribution.textContent = contrib;
-    strengths.textContent = weak;   // Debilidades
-    toImprove.textContent = recs;   // Recomendaciones
-
-    resultBox.classList.remove("hidden");
-    resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    console.info("DISC orientativo (3 puntos). No diagnóstico; varía por rol/contexto/estrés.");
-  });
 })();
+
+// 2) Mapeo de preguntas a escalas DISC
+// Heurística basada en los bloques temáticos del cuestionario original
+const R = (a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
+const MAP = {
+  C: [ ...R(0,10), ...R(37,45) ],                     // Detalle, análisis, objetividad
+  S: [ ...R(46,53), ...R(74,89) ],                    // Seguridad/estabilidad + armonía/paz
+  I: [ ...R(11,20), ...R(29,36), ...R(54,64), ...R(90,98) ], // Afecto, creatividad, sociabilidad, ayuda
+  D: [ ...R(21,28), ...R(65,73) ]                     // Logro/ambición + decisión/liderazgo
+};
+
+// 3) Textos del resultado (tu versión montaña)
+const TEXTS = {
+  D: {
+    titulo: 'Dominante (D)',
+    aporte: 'Lidera decisiones rápidas, motivador ante retos físicos.',
+    debil: 'Impaciente, puede ignorar dudas de otros.',
+    recs: 'Hablar claro y directo, reconocer sus logros; pedir feedback en forma breve.'
+  },
+  I: {
+    titulo: 'Influyente (I)',
+    aporte: 'Animador del equipo, mantiene la cohesión social.',
+    debil: 'Desorganizado, puede omitir detalles técnicos.',
+    recs: 'Involucrarlo en la motivación del grupo; valorar sus ideas creativas.'
+  },
+  S: {
+    titulo: 'Estable (S)',
+    aporte: 'Fomenta la constancia, apoyo emocional y solidaridad.',
+    debil: 'Reacio al cambio, evita confrontaciones.',
+    recs: 'Asegurar su tranquilidad, explicar cambios con anticipación; agradecer su apoyo.'
+  },
+  C: {
+    titulo: 'Concienzudo (C)',
+    aporte: 'Planifica rutas, cuida la seguridad y equipamiento; analítico.',
+    debil: 'Excesivamente cauteloso, puede ralentizar al grupo.',
+    recs: 'Proveerle información detallada, respetar su ritmo; pedir ayuda en organización.'
+  }
+};
+
+// 4) Scoring
+function calcScores() {
+  const scores = {D:0, I:0, S:0, C:0};
+  const totalBy = {D:MAP.D.length, I:MAP.I.length, S:MAP.S.length, C:MAP.C.length};
+
+  // Recorremos todas las respuestas
+  const form = document.getElementById('discTestForm');
+  const inputs = form.querySelectorAll('input[type="radio"]:checked');
+  const values = {}; // name -> value
+  inputs.forEach(i => { values[i.name] = Number(i.value); });
+
+  // Función que suma un set de ítems a una escala
+  function sumSet(scale, arr){
+    arr.forEach(idx=>{
+      const name = 'q'+idx;
+      const v = values[name];
+      if (v==null) return;
+      // v: 1 (En desacuerdo), 2 (Neutral), 3 (De acuerdo)
+      scores[scale] += v;
+    });
+  }
+
+  sumSet('C', MAP.C);
+  sumSet('S', MAP.S);
+  sumSet('I', MAP.I);
+  sumSet('D', MAP.D);
+
+  // Normalizamos 0..100 para mostrar bonito
+  const norm = {};
+  Object.keys(scores).forEach(k=>{
+    const max = totalBy[k]*3;
+    norm[k] = Math.round((scores[k] / max) * 100);
+  });
+
+  // Mayoría
+  const top = Object.entries(norm).sort((a,b)=>b[1]-a[1])[0][0];
+  return {top, norm};
+}
+
+// 5) Render resultado
+function renderResult({top, norm}){
+  const res = document.getElementById('result');
+  const t = TEXTS[top];
+
+  document.getElementById('resultType').textContent = `${t.titulo} — ${norm[top]}%`;
+  document.getElementById('groupContribution').textContent = t.aporte;
+  document.getElementById('strengths').textContent = t.debil;
+  document.getElementById('toImprove').textContent = t.recs;
+
+  res.classList.remove('hidden');
+  res.scrollIntoView({behavior:'smooth'});
+}
+
+// 6) Envío y reinicio
+document.getElementById('discTestForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  renderResult(calcScores());
+});
+
+document.getElementById('result').addEventListener('click', function(e){
+  if (e.target.id === 'restartBtn'){
+    // Reset form (marca Neutral)
+    const form = document.getElementById('discTestForm');
+    form.querySelectorAll('input[type="radio"][value="2"]').forEach(r=>{
+      r.checked = true;
+    });
+    document.getElementById('result').classList.add('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+});
+
