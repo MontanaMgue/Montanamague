@@ -34,6 +34,5 @@ Al finalizar el test, se muestra:
 
 El test está orientado específicamente a grupos de expedición o trekking, para mejorar la dinámica, comunicación y colaboración dentro del equipo.
 
----
+Hecho con ❤️ para fortalecer los vínculos en la montaña
 
-Hecho con ❤️ para fortalecer los vínculos en la montaña.
