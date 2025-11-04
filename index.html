@@ -1,45 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Test de Personalidad DISC — Montaña</title>
-  <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#e96b00" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Personalidad DISC — Montaña</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topbar">
-    <img src="assets/logo.png" alt="Logo Montaña Malargüe" class="logo" />
+
+<header class="topbar">
+    <img src="assets/logo.png" class="logo" alt="Logo Montaña Malargüe">
     <h1>Test de Personalidad DISC</h1>
     <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña</p>
-  </header>
+</header>
 
-  <main>
-    <section class="notice">
-      <p><strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo.</p>
-    </section>
+<main>
 
-    <!-- Mantené tus 99 preguntas tal cual (label + select de 5 opciones). 
-         El script los transformará automáticamente a 3 radios. -->
-    <form id="discTestForm">
-      <!-- EJEMPLO (dejá TODO tu bloque original aquí) -->
-      <!-- label + select … (q0 .. q98) -->
-      <!-- … pegá aquí todas tus preguntas tal como las tenés -->
-    </form>
+<section class="notice">
+    <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
+</section>
 
-    <section id="result" class="hidden" aria-live="polite">
-      <h2>Resultado: <span id="resultType"></span></h2>
-      <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
-      <p><strong>Debilidades:</strong> <span id="strengths"></span></p>
-      <p><strong>Recomendaciones:</strong> <span id="toImprove"></span></p>
-      <button id="restartBtn" type="button">Reiniciar test</button>
-    </section>
-  </main>
+<form id="discTestForm">
 
-  <footer>
-    <small>Orientativo para formación. No es diagnóstico psicológico.</small>
-  </footer>
+<!-- 🔽 🔽 🔽 PEGA TUS 99 PREGUNTAS ORIGINALES ACÁ 🔽 🔽 🔽 -->
 
-  <script src="script.js"></script>
-</body>
-</html>
+<!-- EJEMPLO (BORRAR AL PEGAR TUS PREGUNTAS) -->
+<label for="q0">Ejemplo de pregunta (BORRAR y pegar tus 99)</label>
+<select name="q0">
+    <option value="1">Muy en desacuerdo</option>
+    <option value="2">En desacuerdo</option>
+    <option value="3" selected>Neutral</option>
+    <option value="4">De acuerdo</option>
+    <option value="5">Muy de acuerdo</option>
+</select>
+<!-- FIN EJEMPLO -->
+
+<!-- 🔼 🔼 🔼 PEGA TUS PREGUNTAS ACÁ 🔼 🔼 🔼 -->
+
+<button type="submit" class="send">Ver Resultado</button>
+</form>
+
+<section id="result" class="hidden">
+    <h2>Resultado: <span id="resultType"></span></h2>
+    <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
+    <p><
