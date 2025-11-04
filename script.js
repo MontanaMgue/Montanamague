@@ -248,4 +248,3 @@ document.getElementById('btnWhatsApp').addEventListener('click',()=>{
 
 /* Inicial: mostrar progreso en 0 */
 updateProgress();
-
