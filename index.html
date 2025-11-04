@@ -5,132 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Test de Personalidad DISC — Montaña</title>
   <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#0b3d3a" />
+  <meta name="theme-color" content="#e96b00" />
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo Montaña Malargüe" class="logo" />
+  <header class="topbar">
+    <img src="assets/logo.png" alt="Logo Montaña Malargüe" class="logo" />
     <h1>Test de Personalidad DISC</h1>
-    <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña.</p>
+    <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña</p>
   </header>
 
   <main>
     <section class="notice">
-      <p>
-        <strong>Escala usada por el test:</strong> En desacuerdo / Neutral / De acuerdo.<br>
-        Si ves 5 opciones en los selectores, el sistema las comprime automáticamente (1–2 → En desacuerdo; 3 → Neutral; 4–5 → De acuerdo).
-      </p>
+      <p><strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo.</p>
     </section>
 
-    <noscript>
-      <p style="color:#b00020"><strong>Necesitás activar JavaScript</strong> para completar el test y ver tu resultado.</p>
-    </noscript>
-
+    <!-- Mantené tus 99 preguntas tal cual (label + select de 5 opciones). 
+         El script los transformará automáticamente a 3 radios. -->
     <form id="discTestForm">
-      <!-- Tus preguntas: se mantienen tal cual -->
-      <label for="q0">Me doy cuenta hasta de las más pequeñas incoherencias y errores en mi trabajo.</label>
-      <select name="q0" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q1">Soy capaz de mantener unos estándares altos incluso con plazos ajustados.</label>
-      <select name="q1" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q2">Reviso con frecuencia mi trabajo para asegurarme de que se ajuste a los estándares necesarios.</label>
-      <select name="q2" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q3">Mejorar y perfeccionar los sistemas o procesos es una prioridad para mí.</label>
-      <select name="q3" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q4">Puedo ser crítico/a conmigo o con los demás cuando se cometen errores.</label>
-      <select name="q4" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q5">Para mí es importante asegurarme de que todos los detalles sean correctos antes de completar una tarea.</label>
-      <select name="q5" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q6">A menudo encuentro formas de mejorar métodos que ya se consideran eficaces.</label>
-      <select name="q6" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q7">Cuando me dan feedback, me centro en los detalles para entender cómo mejorar.</label>
-      <select name="q7" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q8">Mi entorno de trabajo está bien organizado y cada cosa tiene un lugar específico.</label>
-      <select name="q8" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q9">Me siento responsable de corregir las imprecisiones en beneficio de los demás.</label>
-      <select name="q9" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <label for="q10">A menudo soy la persona en la que los demás confían para encontrar y subsanar errores.</label>
-      <select name="q10" required>
-        <option value="1">Muy en desacuerdo</option>
-        <option value="2">En desacuerdo</option>
-        <option value="3" selected>Neutral</option>
-        <option value="4">De acuerdo</option>
-        <option value="5">Muy de acuerdo</option>
-      </select>
-
-      <!-- (…) Mantengo el resto de tus preguntas tal cual. -->
-      <!-- Pega aquí el resto de <label> + <select> desde q11 hasta q98 SIN cambios. -->
-
-      <button type="submit">Ver Resultado</button>
+      <!-- EJEMPLO (dejá TODO tu bloque original aquí) -->
+      <!-- label + select … (q0 .. q98) -->
+      <!-- … pegá aquí todas tus preguntas tal como las tenés -->
     </form>
 
     <section id="result" class="hidden" aria-live="polite">
@@ -138,11 +32,13 @@
       <p><strong>Aportes al grupo:</strong> <span id="groupContribution"></span></p>
       <p><strong>Debilidades:</strong> <span id="strengths"></span></p>
       <p><strong>Recomendaciones:</strong> <span id="toImprove"></span></p>
-      <p class="disclaimer">
-        <em>Orientativo para formación. No es diagnóstico psicológico. El comportamiento varía por rol, contexto y estrés.</em>
-      </p>
+      <button id="restartBtn" type="button">Reiniciar test</button>
     </section>
   </main>
+
+  <footer>
+    <small>Orientativo para formación. No es diagnóstico psicológico.</small>
+  </footer>
 
   <script src="script.js"></script>
 </body>
