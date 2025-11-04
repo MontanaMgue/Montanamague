@@ -24,20 +24,11 @@ html,body{
   position:relative;
   overflow:hidden;
 }
-.hero::after{
-  content:"";
-  position:absolute; inset:0;
-  background-image: url('bg.jpg');
-  background-size: cover;       
-  background-position:center 30%;
-  background-repeat:no-repeat;
-  opacity:.18;
-  mix-blend-mode:multiply;
-  pointer-events:none;
-}
+/* ❗ Quitamos la imagen en el header para evitar doble fondo
+.hero::after{ ... }  <-- REMOVIDO */
 .logo{ 
   width:88px; display:block; margin:0 auto 8px; 
-  border-radius:50%; background:#fff2; padding:6px 
+  border-radius:50%; background:#fff2; padding:6px;
 }
 .hero h1{ margin:0; font-size:2rem }
 .hero p{ margin:.35rem 0 0; color:#fff; opacity:.9 }
@@ -47,17 +38,18 @@ main{
   position:relative;
   min-height: calc(100vh - 220px);
 
-  /* ✅ Fondo con IMAGEN COMPLETA, SIN deformar */
+  /* ✅ Fondo con IMAGEN UNA SOLA VEZ, ajustada sin deformar */
   background:#000;
   background-image: url('bg.jpg');
-  background-size: contain !important;   /* ✅ Ajusta sin deformar */
+  background-size: contain;            /* Ajusta sin deformar (desktop) */
   background-position: top center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed;        /* Parallax suave en desktop */
 
   padding:24px 16px 64px;
 }
 
+/* Velo para legibilidad del contenido */
 main::before{
   content:"";
   position:absolute; inset:0;
@@ -153,11 +145,12 @@ button:disabled{ opacity:.5; cursor:not-allowed }
 
 /* ------------ GENERAL ------------ */
 .hidden{ display:none }
+
 /* ✅ Ajuste especial para celulares */
 @media (max-width: 768px) {
   main {
-    background-size: cover !important; /* Llenar pantalla sin bandas */
+    background-size: cover;          /* Llenar pantalla en mobile */
     background-position: center center;
-    background-attachment: scroll; /* Evita saltos al scrollear en iPhone */
+    background-attachment: scroll;   /* Evita saltos en iOS */
   }
 }
