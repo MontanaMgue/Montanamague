@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Test de Personalidad DISC — Montaña Malargüe</title>
+  <title>Test DISC – Montaña</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,65 +14,62 @@
   </header>
 
   <main>
-    <section class="card info">
-      <p><strong>Cómo responder:</strong> Elegí la opción que mejor te represente <em>en general</em>.
-        No hay respuestas “buenas o malas”. Tarda 7–10 minutos.</p>
-    </section>
-
-    <!-- Progreso -->
-    <div class="progress-wrap">
-      <div class="progress"><div id="progressBar"></div></div>
-      <div id="progressText">0 / 56</div>
+    <!-- Info escala -->
+    <div class="card info">
+      <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
     </div>
 
-    <!-- Formulario -->
-    <form id="discForm" class="card">
-      <div id="questions"></div>
-    </form>
+    <!-- Barra de progreso -->
+    <div class="progress-wrap" aria-label="Progreso">
+      <div class="progress"><div id="progressBar"></div></div>
+      <div id="progressText">0 / 48</div>
+    </div>
 
+    <!-- Contenedor del test -->
+    <form id="discForm" class="card"></form>
+
+    <!-- Acciones -->
     <div class="actions">
-      <button id="btnResult">Ver resultado</button>
-      <button id="btnReset" class="secondary">Reiniciar</button>
+      <button id="btnVer" type="button">Ver Resultado</button>
+      <button id="btnReset" type="button" class="secondary">Reiniciar test</button>
     </div>
 
     <!-- Resultado -->
-    <section id="resultCard" class="card hidden">
-      <h2 class="result-title">Resultado: <span id="resultType">—</span> <span id="resultPct"></span></h2>
-
-      <!-- Imagen personalizada con marcador -->
-      <div class="matrix-wrap">
-        <!-- 👉 Cambiá 'resultado.jpg' por la imagen que quieras usar como fondo del resultado -->
-        <img id="discMatrixImg" src="resultado.jpg" alt="Matriz/Imagen de resultado" />
-        <div id="discMarker" class="marker" title="Tu posición"></div>
-      </div>
+    <section id="result" class="card hidden">
+      <h2 class="result-title">Resultado</h2>
+      <p id="resultHeadline" class="result-headline"></p>
 
       <div class="summary-grid">
         <div>
           <h3>Aportes al grupo</h3>
-          <p id="groupContribution">—</p>
+          <p id="groupContribution"></p>
         </div>
         <div>
           <h3>Puntos fuertes</h3>
-          <p id="strengths">—</p>
+          <p id="strengths"></p>
         </div>
         <div>
           <h3>A mejorar</h3>
-          <p id="toImprove">—</p>
+          <p id="toImprove"></p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:14px;">Brújula DISC</h3>
+      <div class="compass-wrap">
+        <div class="compass" id="compass">
+          <div class="dot" id="compassDot" title="Tu posición DISC"></div>
         </div>
       </div>
 
       <p class="closing">
-        Recordá: la montaña es proceso. Tu perfil <strong id="closingType">—</strong> suma cuando se integra a un equipo diverso.
-        <br>“No es la cumbre… es el proceso.” 🏔️🔥💪
+        Ningún perfil es “mejor” que otro: **todas las energías suman**. Tu combinación define
+        cómo aportás valor en la montaña y en la vida cotidiana.
       </p>
-
-      <div class="chart-actions">
-        <button id="btnDownload">Descargar PNG</button>
-        <button id="btnWhatsApp" class="whatsapp">Compartir por WhatsApp</button>
-      </div>
     </section>
 
-    <p class="footer">Montaña Malargüe · DISC orientado a grupos de montaña (uso educativo)</p>
+    <footer class="footer">
+      Orientativo para formación. No es diagnóstico psicológico.
+    </footer>
   </main>
 
   <script src="script.js"></script>
