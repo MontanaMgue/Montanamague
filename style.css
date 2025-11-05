@@ -6,15 +6,12 @@
   --text:#f7f7f7;
   --muted:#bdbdbd;
   --accent:#ffd08a;
-  --ok:#28a745;
   --wa:#25d366;
 }
 
-*{ box-sizing:border-box }
-html,body{
-  margin:0; padding:0; background:#000;
-  color:var(--text); font-family:Arial, Helvetica, sans-serif;
-}
+*{box-sizing:border-box}
+html,body{ margin:0; padding:0; background:#000; color:var(--text);
+  font-family:Arial, Helvetica, sans-serif; }
 
 /* ------------ HEADER ------------ */
 .hero{
@@ -27,38 +24,36 @@ html,body{
 .hero::after{
   content:"";
   position:absolute; inset:0;
-  background-image: url('bg.jpg');   /* 👉 tu foto de portada general */
-  background-size: cover;            /* llena sin deformar */
+  background-image: url('bg.jpg');
+  background-size: cover;
   background-position:center 30%;
   background-repeat:no-repeat;
   opacity:.18;
   mix-blend-mode:multiply;
   pointer-events:none;
 }
-.logo{
-  width:88px; display:block; margin:0 auto 8px;
-  border-radius:50%; background:#fff2; padding:6px
-}
+.logo{ width:88px; display:block; margin:0 auto 8px; border-radius:50%; background:#fff2; padding:6px }
 .hero h1{ margin:0; font-size:2rem }
 .hero p{ margin:.35rem 0 0; color:#fff; opacity:.9 }
 
-/* ------------ BODY (fondo controlado) ------------ */
+/* ------------ BODY ------------ */
 main{
   position:relative;
   min-height: calc(100vh - 220px);
+
+  /* Fondo que NO se deforma: contiene y mantiene proporción */
   background:#000;
-  /* Fondo general de la página (no desbordado) */
   background-image: url('bg.jpg');
-  background-size: contain;       /* ✅ se ajusta a la página sin deformarse */
+  background-size: contain;         /* ✅ sin deformar */
   background-position: top center;
   background-repeat: no-repeat;
-  background-attachment: fixed;   /* efecto sutil en desktop */
+
   padding:24px 16px 64px;
 }
 main::before{
   content:"";
   position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(0,0,0,.60), rgba(0,0,0,.95));
+  background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.92));
   pointer-events:none;
 }
 
@@ -79,104 +74,60 @@ main::before{
   z-index:1; position:relative; max-width:980px; margin:8px auto 12px;
   display:flex; align-items:center; gap:10px; color:var(--muted);
 }
-.progress{
-  flex:1; height:10px; background:#ffffff21; border-radius:999px; overflow:hidden;
-}
-#progressBar{
-  height:100%; width:0%;
-  background:linear-gradient(90deg, var(--accent), #ff9f3b);
-  border-radius:999px; transition:width .25s ease;
-}
+.progress{ flex:1; height:10px; background:#ffffff21; border-radius:999px; overflow:hidden }
+#progressBar{ height:100%; width:0%; background:linear-gradient(90deg, var(--accent), #ff9f3b); border-radius:999px; transition:width .25s ease; }
 #progressText{ min-width:70px; text-align:right; font-size:.9rem }
 
 /* ------------ QUESTIONS ------------ */
-.question{
-  margin:14px 0 18px;
-  padding:14px 14px 8px;
-  background:#0f0f0f88; border-radius:12px; border:1px solid #ffffff18;
-}
-.question h4{
-  margin:0 0 8px; font-size:1rem; font-weight:600;
-}
+.question{ margin:14px 0 18px; padding:14px 14px 8px; background:#0f0f0f88; border-radius:12px; border:1px solid #ffffff18 }
+.question h4{ margin:0 0 8px; font-size:1rem; font-weight:600 }
 .opts{ list-style:none; padding:0; margin:0 }
-.opts li{
-  display:flex; align-items:center; gap:8px;
-  padding:6px 2px; border-radius:8px;
-}
+.opts li{ display:flex; align-items:center; gap:8px; padding:6px 2px; border-radius:8px }
 .opts input[type="radio"]{ accent-color:var(--accent); transform:scale(1.1) }
 .opts label{ cursor:pointer }
 
-/* ------------ RESULT IMG + MARKER ------------ */
-.matrix-wrap{
-  position:relative; margin:8px 0 14px;
-  border:1px dashed #ffffff30; border-radius:12px; overflow:hidden;
-  background:#0a0a0a;
-}
-.matrix-wrap img{
-  display:block; width:100%; height:auto; 
-  max-height:520px; object-fit:contain; /* ✅ no se deforma */
-  background:#000;
-}
-.marker{
-  position:absolute; width:14px; height:14px; border-radius:50%;
-  background:var(--accent); border:3px solid rgba(0,0,0,.55);
-  box-shadow: 0 0 0 6px rgba(255,208,138,.35);
-  transform: translate(-50%, -50%);
-}
-
 /* ------------ BUTTONS ------------ */
-.actions{
-  z-index:1; position:relative;
-  max-width:980px; margin:10px auto 22px;
-  display:flex; gap:10px; flex-wrap:wrap;
-}
-button{
-  background:var(--brand);
-  color:#fff; border:none; border-radius:10px;
-  padding:10px 18px; font-size:1rem; cursor:pointer;
-}
+.actions{ z-index:1; position:relative; max-width:980px; margin:10px auto 22px; display:flex; gap:10px; flex-wrap:wrap }
+button{ background:var(--brand); color:#fff; border:none; border-radius:10px; padding:10px 18px; font-size:1rem; cursor:pointer }
 button:hover{ background:var(--brand-dark) }
-button.secondary{ background:#2c2c2c; }
+button.secondary{ background:#2c2c2c }
 button.secondary:hover{ background:#404040 }
 button:disabled{ opacity:.5; cursor:not-allowed }
 
-/* ------------ RESULT TEXTS ------------ */
+/* ------------ RESULTS ------------ */
 .result-title{ font-size:1.05rem; margin:.5rem 0 1rem }
-.summary-grid{
-  display:grid; gap:14px; grid-template-columns:repeat(3,1fr);
-}
+.summary-grid{ display:grid; gap:14px; grid-template-columns:repeat(3,1fr) }
 .summary-grid h3{ margin:.1rem 0 .4rem }
 @media (max-width:900px){ .summary-grid{ grid-template-columns:1fr } }
 
-.chart-actions{
-  margin:12px 0 0; display:flex; gap:10px; flex-wrap:wrap;
+.compass-wrap{ display:flex; justify-content:center; margin-top:8px }
+.compass{
+  width:680px; max-width:100%;
+  aspect-ratio: 3 / 2;              /* se adapta sin deformar */
+  background: url('disc.png') center center / contain no-repeat; /* ← TU imagen de la matriz */
+  position:relative;
+  border-radius:8px;
+  border:1px solid #ffffff1f;
 }
-.whatsapp{ background:var(--wa) }
-.whatsapp:hover{ background:#1ebe5a }
-
-.closing{
-  margin-top:14px; color:#f1f1f1; font-style:italic;
-  border-top:1px dashed #ffffff22; padding-top:10px;
+.dot{
+  --s:14px;
+  width:var(--s); height:var(--s);
+  background:#fff; border:3px solid #111; border-radius:50%;
+  position:absolute; transform:translate(-50%, -50%);
+  box-shadow:0 0 0 3px #ffffff66, 0 0 12px #000;
 }
 
 /* ------------ FOOTER ------------ */
-.footer{
-  position:relative; z-index:1; text-align:center;
-  color:#d0d0d0; font-size:.9rem; margin-top:18px;
-  opacity:.85;
-}
+.footer{ position:relative; z-index:1; text-align:center; color:#d0d0d0; font-size:.9rem; margin-top:18px; opacity:.85 }
 
-/* ------------ GENERAL ------------ */
+/* ------------ HIDDEN ------------ */
 .hidden{ display:none }
 
-/* ✅ Mobile tuning */
-@media (max-width: 768px) {
-  main {
-    background-size: cover;      /* llena alto/alto en móviles */
+/* Celular: que el fondo llene y no “salte” */
+@media (max-width: 768px){
+  main{
+    background-size: cover;       /* llena alto/anchura */
     background-position: center;
-    background-attachment: scroll; /* evita saltos en iOS */
-  }
-  .matrix-wrap img{
-    max-height: 62vh; /* que no se “coma” toda la pantalla */
   }
 }
+
