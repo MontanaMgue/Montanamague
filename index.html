@@ -1,43 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Test DISC – Montaña</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test de Personalidad DISC</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <header class="hero">
-    <img src="logo.png" alt="Logo Montaña Malargüe" class="logo" />
+    <img src="logo.png" alt="Logo Montaña Malargüe" class="logo"/>
     <h1>Test de Personalidad DISC</h1>
     <p>Descubrí tu perfil y cómo aportás a tu grupo de montaña</p>
   </header>
 
   <main>
-    <!-- Info escala -->
     <div class="card info">
       <strong>Escala:</strong> En desacuerdo • Neutral • De acuerdo
     </div>
 
-    <!-- Barra de progreso -->
-    <div class="progress-wrap" aria-label="Progreso">
+    <div class="progress-wrap">
       <div class="progress"><div id="progressBar"></div></div>
       <div id="progressText">0 / 48</div>
     </div>
 
-    <!-- Contenedor del test -->
     <form id="discForm" class="card"></form>
 
-    <!-- Acciones -->
     <div class="actions">
       <button id="btnVer" type="button">Ver Resultado</button>
       <button id="btnReset" type="button" class="secondary">Reiniciar test</button>
     </div>
 
-    <!-- Resultado -->
     <section id="result" class="card hidden">
       <h2 class="result-title">Resultado</h2>
-      <p id="resultHeadline" class="result-headline"></p>
+      <p id="lead"></p>
 
       <div class="summary-grid">
         <div>
@@ -54,22 +49,23 @@
         </div>
       </div>
 
-      <h3 style="margin-top:14px;">Brújula DISC</h3>
+      <h3 style="margin-top:12px">Brújula DISC</h3>
       <div class="compass-wrap">
-        <div class="compass" id="compass">
-          <div class="dot" id="compassDot" title="Tu posición DISC"></div>
-        </div>
+        <img id="compassImg" src="disc_compass.png" alt="Brújula DISC"/>
+        <div id="marker"></div>
       </div>
 
-      <p class="closing">
-        Ningún perfil es “mejor” que otro: **todas las energías suman**. Tu combinación define
-        cómo aportás valor en la montaña y en la vida cotidiana.
+      <div class="chart-actions">
+        <button id="btnDownload" type="button" class="secondary">Descargar imagen</button>
+        <button id="btnShareWA" type="button" class="whatsapp">Compartir por WhatsApp</button>
+      </div>
+
+      <p class="closing" id="closingMsg">
+        Orientativo para formación. No es diagnóstico psicológico.
       </p>
     </section>
 
-    <footer class="footer">
-      Orientativo para formación. No es diagnóstico psicológico.
-    </footer>
+    <p class="footer">Orientativo para formación. No es diagnóstico psicológico.</p>
   </main>
 
   <script src="script.js"></script>
